@@ -21,45 +21,19 @@
  * SOFTWARE.
  */
 
-import TranslateFileModel from "../model/translationFile";
+import TranslationItem from "./translationItem";
 
-export default class JsonReader {
+/**
+ * Represents the translation file.
+ * @class
+ */
+export default class TranslationFileModel {
   /**
-   * Parse file content.
-   * @private
-   * @param {string} content The file content.
-   * @return {Object} The JSON object.
+   * Constructor.
+   * @constructor
+   * @param name    The file name.
+   * @param content The file content.
    */
-  private _parseFileContent = (content: string): Object => {
-    return JSON.parse(content);
-  };
-
-  /**
-   * Reads many files.
-   * @param {FileList} files The files to read.
-   * @param {Function} callback The callback.
-   */
-  public readFiles = (files: FileList, callback: Function): void => {
-    for (let i = 0; i < files.length; i++) {
-      let file = files[i];
-      this.readFile(file, callback);
-    }
-  };
-
-  /**
-   * Reads file.
-   * @param {File} file The file to read.
-   * @param {Function} callback The callback.
-   */
-  public readFile = (file: File, callback: Function): void => {
-    const name = file.name;
-    const reader = new FileReader();
-    reader.onloadend = (e: ProgressEvent) => {
-      const content = this._parseFileContent((<IDBOpenDBRequest>e.target).result);
-      const result = new TranslateFileModel(name, content);
-      callback(result);
-    };
-
-    reader.readAsText(file, "utf-8");
-  };
+  public constructor(public name: string, public content: Object) {
+  }
 }

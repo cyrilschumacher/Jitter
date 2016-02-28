@@ -35,13 +35,6 @@ import JsonReader from "../service/jsonReader";
  */
 interface IAppComponentState {
   hasFiles: boolean;
-}
-
-/**
- * Interface for component state.
- * @interface
- */
-interface IDragComponentState {
   isDragged: boolean;
 }
 
@@ -58,7 +51,8 @@ interface IDragComponentProps {
  * @class
  * @extends React.Component
  */
-export default class App extends React.Component<Object, IAppComponentState> {  /**
+export default class App extends React.Component<Object, IAppComponentState> {
+  /**
    * JSON reader.
    * @private
    */
@@ -85,19 +79,20 @@ export default class App extends React.Component<Object, IAppComponentState> {  
    * @param {any}   file  The file.
    * @param {Array} files The files.
    */
-  private _addFile = (file: any, files: Array): void => {
-    this.setState({hasFiles: true});
+  private _addFile = (file: any, files: Array<File>): void => {
+    this.setState({hasFiles: true, isDragged: this.state.isDragged});
     this.refs["gridComponent"].addFile(file, files);
   };
 
   /**
    * Open browse.
+   * @private
    */
-  public browse = (): void => {
-    const browseElement: HTMLInputElement = document.getElementById("browse");
+  public _browse = (): void => {
+    const browseElement = document.getElementById("browse");
     browseElement.click();
 
-    const files = browseElement.files;
+    const files = browseElement["files"];
     this._jsonReader.readFiles(files, result => {
       this._addFile(result, files);
     });
@@ -105,27 +100,30 @@ export default class App extends React.Component<Object, IAppComponentState> {  
 
   /**
    * Fired when a dragged element or text selection leaves a valid drop target.
+   * @private
    * @param {DragEvent} e Represents a drag and drop interaction.
    */
-  public dragLeave = (e: any): void => {
+  public _dragLeave = (e: any): void => {
     e.preventDefault();
-    this.setState({isDragged: false});
+    this.setState({hasFiles: this.state.hasFiles, isDragged: false});
   };
 
   /**
    * Fired when an element or text selection is being dragged over a valid drop target.
+   * @private
    * @param {DragEvent} e Represents a drag and drop interaction.
    */
-  public dragOver = (e: any): void => {
+  public _dragOver = (e: any): void => {
     e.preventDefault();
-    this.setState({isDragged: true});
+    this.setState({hasFiles: this.state.hasFiles, isDragged: true});
   };
 
   /**
    * Fired when an element or text selection is dropped on a valid drop target.
+   * @private
    * @param {DragEvent} e Represents a drag and drop interaction.
    */
-  public drop = (e: any): void => {
+  public _drop = (e: any): void => {
     e.preventDefault();
     if (e.dataTransfer && (e.dataTransfer.files.length !== 0)) {
       const files = e.dataTransfer.files;
@@ -151,10 +149,9 @@ export default class App extends React.Component<Object, IAppComponentState> {  
     });
 
     return (
-      <div className="app" onDragLeave={this.dragLeave} onDragOver={this.dragOver} onDrop={this.drop}>
+      <div className="app" onDragLeave={this._dragLeave} onDragOver={this._dragOver} onDrop={this._drop}>
         <div className={dragClass}>
-          <Drag addFile={this.addFile}/>
-          <input className="drag__browse-input" id="browse" type="file" accept=".json" multiple/>
+          <Drag addFile={this._addFile} browse={this._browse}/>
         </div>
         <div className={gridClass}>
           <Grid ref="gridComponent"/>

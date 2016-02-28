@@ -23,6 +23,7 @@
 
 import * as _ from "lodash";
 import TranslationModel from "../model/translation";
+import TranslationFileModel from "../model/translationFile";
 import TranslationItemModel from "../model/translationItem";
 
 export default class TranslationService {
@@ -32,10 +33,10 @@ export default class TranslationService {
    * @param files       The files.
    * @return The updated translation.
    */
-  private _createDefaultKeyByFiles = (translation: TranslationModel, files: Array): TranslationModel => {
+  private _createDefaultKeyByFiles = (translation: TranslationModel, files: Array<TranslationFileModel>): TranslationModel => {
     for (let index in translation.items) {
       for (let file of files) {
-        let value = translation.items[index].values[file.name];
+        let value: string = translation.items[index].values[file.name];
         if (!value) {
           translation.items[index].values[file.name] = "";
         }
@@ -58,17 +59,28 @@ export default class TranslationService {
     return translation;
   };
 
+  public addKey = (key: string, files: Array<TranslationFileModel>, translation: TranslationModel): TranslationModel => {
+    let newItem = new TranslationItemModel(key, new Array());
+    for (let file of files) {
+      let value: string = newItem.values[file.name];
+      newItem.values[file.name] = "";
+    }
+
+    translation.items.push(newItem);
+    return translation;
+  };
+
   /**
    * Parse a file.
    * @param file        The file to parse.
    * @param files       The files.
    * @param translation The translation.
    */
-  public parse = (file: Object, files: Array, translation: TranslationModel): TranslationModel => {
+  public parse = (file: TranslationFileModel, files: Array<TranslationFileModel>, translation: TranslationModel): TranslationModel => {
     translation = this._createTranslation("Default", translation);
 
     for (let key in file.content) {
-      const value = file.content[key];
+      const value: string|Object = file.content[key];
 
       if (typeof(value) === "string") {
         let exists = _.filter(translation.items, item => item.key === key);

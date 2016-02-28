@@ -28,27 +28,26 @@ import * as React from "react";
  * @class
  * @extends React.Component
  */
-export default class Drag extends React.Component<IDragComponentProps, IDragComponentState> {
-
-
+export default class Drag extends React.Component<any, any> {
   /**
    * Constructor.
    * @constructor
-   * @param {IDragComponentProps} props The properties.
+   * @param props The properties.
    */
-  constructor(props: IDragComponentProps) {
+  constructor(props: any) {
     super(props);
   };
 
   /**
    * Render a ReactElement into the DOM in the supplied container and return a reference to the component.
-   * @return {any} The reference to the component.
+   * @return The reference to the component.
    */
   public render(): React.ReactElement<any> {
     return (
       <div className="drag__container">
         <h1 className="drag__container__title">Drag & drop</h1>
-        <span className="drag__container__subtitle">your translation files here, or <a className="drag__container__subtitle__browse" onClick={this.browse}>browse</a>.</span>
+        <span className="drag__container__subtitle">your translation files here, or <a className="drag__container__subtitle__browse" onClick={this.props.browse}>browse</a>.</span>
+        <input className="drag__browse-input" id="browse" type="file" accept=".json" multiple/>
       </div>
     );
   }

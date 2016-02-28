@@ -5,21 +5,27 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "noFallthroughCasesInSwitch": true,
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "noImplicitReturns": true,
         "removeComments": true,
         "target": "ES6"
     },
     "filesGlob": [
         "./src/**/*.ts",
+        "./src/**/*.tsx",
         "!node_modules/**/*.ts"
     ],
     "files": [
         "./src/main.ts",
         "./src/script/model/translation.ts",
+        "./src/script/model/translationFile.ts",
         "./src/script/model/translationItem.ts",
         "./src/script/service/jsonReader.ts",
-        "./src/script/service/translation.ts"
+        "./src/script/service/translation.ts",
+        "./src/script/app.tsx",
+        "./src/script/component/app.tsx",
+        "./src/script/component/drag.tsx",
+        "./src/script/component/grid.tsx"
     ],
     "exclude": [],
     "atom": {

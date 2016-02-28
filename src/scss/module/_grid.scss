@@ -21,10 +21,15 @@
 // SOFTWARE.
 
 .grid {
-  background: $grid-background-color;
   height: 100%;
-  table-layout: fixed;
   width: 100%;
+
+  table {
+    background: $grid-background-color;
+    height: inherit;
+    table-layout: fixed;
+    width: inherit;
+  }
 
   &__header {
     &__file,
@@ -88,6 +93,48 @@
 
       &:focus {
         border-color: $grid-over-key-value-border-color;
+      }
+    }
+  }
+
+  &__footer {
+    margin: 1rem 0;
+    text-align: center;
+
+    &__add-input {
+      border: 1px solid transparent;
+      outline: none;
+      padding: .5rem 1rem;
+
+      &:focus {
+        border-color: $grid-over-footer-add-input-border-color;
+      }
+    }
+
+    &__add-button {
+      background: none;
+      border: 1px solid #fff;
+      margin: 0 1rem;
+      outline: none;
+      padding: .4rem 1rem;
+
+      &:hover,
+      &:focus {
+        border-color: $grid-over-footer-add-input-border-color;
+        color: $grid-over-footer-add-input-border-color;
+      }
+
+      &:active {
+        background: $grid-over-footer-add-input-border-color;
+        color: #fff;
+      }
+
+      i {
+        margin: 0 1rem 0 0;
+      }
+
+      span {
+        text-transform: uppercase;
       }
     }
   }

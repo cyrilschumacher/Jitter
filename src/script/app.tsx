@@ -25,4 +25,4 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import App from "./script/component/app";
 
-ReactDOM.render(<App />, document.getElementById("app"));
+ReactDOM.render(<App />, document.body);

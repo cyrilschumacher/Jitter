@@ -55,8 +55,7 @@
         display: inline-block;
         margin: 0 .5rem;
 
-        &__close,
-        &__save {
+        button {
           background: none;
           border: 1px solid $grid-header-action-border-color;
           display: table;

@@ -59,6 +59,15 @@ export default class App extends React.Component<Object, IAppComponentState> {
   private _jsonReader: JsonReader;
 
   /**
+   * Default properties.
+   * @static
+   */
+  public refs: {
+    [ref: string]: React.Component<any, any>;
+    gridComponent: Grid
+  };
+
+  /**
    * Constructor.
    * @constructor
    * @param {Object} props The properties.
@@ -81,7 +90,7 @@ export default class App extends React.Component<Object, IAppComponentState> {
    */
   private _addFile = (file: any, files: Array<File>): void => {
     this.setState({hasFiles: true, isDragged: this.state.isDragged});
-    this.refs["gridComponent"].addFile(file, files);
+    this.refs.gridComponent.addFile(file, files);
   };
 
   /**

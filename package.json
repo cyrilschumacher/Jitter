@@ -1,6 +1,6 @@
 {
   "name": "jitter",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Edit your language files in JSON format with ease!",
   "scripts": {
     "start": "electron dist/main.js"

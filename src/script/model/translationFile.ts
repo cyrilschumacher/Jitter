@@ -32,8 +32,9 @@ export default class TranslationFileModel {
    * Constructor.
    * @constructor
    * @param name    The file name.
+   * @param uuid    The UUID.
    * @param content The file content.
    */
-  public constructor(public name: string, public content: Object) {
+  public constructor(public name: string, public uuid: string, public content: Object) {
   }
 }

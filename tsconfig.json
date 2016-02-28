@@ -1,0 +1,28 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "jsx": "react",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "removeComments": true,
+        "target": "ES6"
+    },
+    "filesGlob": [
+        "./src/**/*.ts",
+        "!node_modules/**/*.ts"
+    ],
+    "files": [
+        "./src/main.ts",
+        "./src/script/model/translation.ts",
+        "./src/script/model/translationItem.ts",
+        "./src/script/service/jsonReader.ts",
+        "./src/script/service/translation.ts"
+    ],
+    "exclude": [],
+    "atom": {
+        "rewriteTsconfig": true
+    }
+}

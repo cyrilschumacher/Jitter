@@ -17,6 +17,7 @@
     ],
     "files": [
         "./src/main.ts",
+        "./src/script/i18n.ts",
         "./src/script/model/translation.ts",
         "./src/script/model/translationFile.ts",
         "./src/script/model/translationItem.ts",

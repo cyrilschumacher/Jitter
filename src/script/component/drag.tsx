@@ -22,13 +22,14 @@
  */
 
 import * as React from "react";
+import { translate } from "react-i18next";
 
 /**
  * Drag component.
  * @class
  * @extends React.Component
  */
-export default class Drag extends React.Component<any, any> {
+class Drag extends React.Component<any, any> {
   /**
    * Constructor.
    * @constructor
@@ -43,12 +44,19 @@ export default class Drag extends React.Component<any, any> {
    * @return The reference to the component.
    */
   public render(): React.ReactElement<any> {
+    const t = this.props.t;
     return (
       <div className="drag__container">
-        <h1 className="drag__container__title">Drag & drop</h1>
-        <span className="drag__container__subtitle">your translation files here, or <a className="drag__container__subtitle__browse" onClick={this.props.browse}>browse</a>.</span>
+        <img className="drag__container__logo" src="asset/image/file_icon.png"/>
+        <h1 className="drag__container__title">{t("drag.title")}</h1>
+        <span className="drag__container__subtitle">
+          <span>{t("drag.subtitle")}</span>
+          <a className="drag__container__subtitle__browse" onClick={this.props.browse}>{t("drag.browse")}</a>.
+        </span>
         <input className="drag__browse-input" id="browse" type="file" accept=".json" multiple/>
       </div>
     );
   }
 }
+
+export default translate(["translation"])(Drag);

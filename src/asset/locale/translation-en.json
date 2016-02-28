@@ -1,0 +1,13 @@
+{
+  "drag": {
+    "title": "Drag & drop",
+    "subtitle": "your translation files here, or ",
+    "browse": "browse"
+  },
+  "grid": {
+    "add_key": "Add key",
+    "close": "Close",
+    "keys": "Keys",
+    "save": "Save As..."
+  }
+}

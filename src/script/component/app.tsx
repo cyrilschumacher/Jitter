@@ -62,6 +62,12 @@ export default class App extends React.Component<Object, IAppComponentState> {
    * Default properties.
    * @static
    */
+  public static defaultProps: Object = {};
+
+  /**
+   * Default properties.
+   * @static
+   */
   public refs: {
     [ref: string]: React.Component<any, any>;
     gridComponent: Grid
@@ -154,6 +160,7 @@ export default class App extends React.Component<Object, IAppComponentState> {
     });
 
     let gridClass = classNames({
+      "grid": true,
       "hidden": !this.state.hasFiles
     });
 
@@ -169,5 +176,3 @@ export default class App extends React.Component<Object, IAppComponentState> {
     );
   }
 }
-
-ReactDOM.render(<App />, document.body);

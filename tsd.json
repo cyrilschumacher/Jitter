@@ -31,6 +31,27 @@
     },
     "react/react-addons-linked-state-mixin.d.ts": {
       "commit": "163a4277199c3d896d9efffe24ea84c85f55c8ac"
+    },
+    "i18next/i18next.d.ts": {
+      "commit": "b10e5ade29708bb0a7d21916a9fe289973520e89"
+    },
+    "serve-static/serve-static.d.ts": {
+      "commit": "b10e5ade29708bb0a7d21916a9fe289973520e89"
+    },
+    "mime/mime.d.ts": {
+      "commit": "b10e5ade29708bb0a7d21916a9fe289973520e89"
+    },
+    "i18next-sprintf-postprocessor/i18next-sprintf-postprocessor.d.ts": {
+      "commit": "b10e5ade29708bb0a7d21916a9fe289973520e89"
+    },
+    "i18next-express-middleware/i18next-express-middleware.d.ts": {
+      "commit": "b10e5ade29708bb0a7d21916a9fe289973520e89"
+    },
+    "express/express.d.ts": {
+      "commit": "b10e5ade29708bb0a7d21916a9fe289973520e89"
+    },
+    "jquery/jquery.d.ts": {
+      "commit": "b10e5ade29708bb0a7d21916a9fe289973520e89"
     }
   }
 }

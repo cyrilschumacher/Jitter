@@ -1,7 +1,11 @@
 {
   "name": "jitter",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Edit your language files in JSON format with ease!",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cyrilschumacher/jitter.git"
+  },
   "scripts": {
     "start": "electron dist/main.js"
   },
@@ -14,7 +18,9 @@
   ],
   "author": "Cyril Schumacher",
   "license": "MIT",
+  "electronVersion": "0.36.8",
   "devDependencies": {
+    "electron-prebuilt": "^0.36.9",
     "gulp": "^3.9.1",
     "gulp-jade": "^1.1.0",
     "gulp-sass": "^2.2.0",
@@ -24,11 +30,15 @@
   "dependencies": {
     "bootstrap": "^3.3.6",
     "classnames": "^2.2.3",
+    "i18next": "^2.2.0",
+    "i18next-browser-languagedetector": "0.0.14",
+    "i18next-xhr-backend": "^0.3.0",
     "lodash": "^4.5.1",
     "react": "^0.14.7",
     "react-addons-linked-state-mixin": "^0.14.7",
     "react-bootstrap": "^0.28.3",
     "react-dom": "^0.14.7",
+    "react-i18next": "^1.1.0",
     "react-router": "^2.0.0"
   }
 }

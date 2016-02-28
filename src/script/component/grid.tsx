@@ -21,10 +21,11 @@
  * SOFTWARE.
  */
 
+import * as fs from "fs";
 import * as React from "react";
 import * as LinkedStateMixin from "react-addons-linked-state-mixin";
-import * as remote from "remote";
-import * as fs from "fs";
+import {remote} from "electron";
+
 import TranslationModel from "../model/translation";
 import TranslationItemModel from "../model/translationItem";
 import TranslationFileModel from "../model/translationFile";
@@ -125,7 +126,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
     let _grid = this;
     return this.state.files.map(file => {
       let saveHandler = _grid._saveFile.bind(this, file.name);
-      let removeHandler = _grid._removeFile.bind(this, file.uuid);
+      let closeHandler = _grid._closeFile.bind(this, file.uuid);
       let headerClass = "grid__header__file " + file.uuid;
       return (
         <th className={headerClass}>
@@ -136,7 +137,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
             </button>
           </div>
           <div className="grid__header__file__action">
-            <button onClick={removeHandler}>
+            <button onClick={closeHandler}>
               <i className="ion-ios-trash-outline"></i>
             </button>
           </div>
@@ -146,32 +147,48 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
   };
 
   /**
-   * Remove a file.
+   * close a file.
    * @param uuid The UUID.
    */
-  private _removeFile = (uuid: string): void => {
-    let elements = document.getElementsByClassName(uuid);
-    while (elements.length > 0) {
-        elements[0].parentNode.removeChild(elements[0]);
-    }
+  private _closeFile = (uuid: string): void => {
+    const options = {buttons: ["Yes", "No"], message: "Do you want to save your file before closing?", type: "question"};
+    remote.dialog.showMessageBox(null, options, response => {
+      if (!response) {
+        const file = _.find(this.state.files, item => item.uuid === uuid);
+        this._saveFile(file.name, () => {
+          let elements = document.getElementsByClassName(uuid);
+          while (elements.length > 0) {
+              elements[0].parentNode.removeChild(elements[0]);
+          }
+        });
+      } else {
+        let elements = document.getElementsByClassName(uuid);
+        while (elements.length > 0) {
+            elements[0].parentNode.removeChild(elements[0]);
+        }
+      }
+    });
   };
 
   /**
    * Save the translation file.
    * @private
    * @param fileName The file name.
+   * @param callback The callback. This parameter is optional.
    */
-  private _saveFile = (fileName: string): void => {
+  private _saveFile = (fileName: string, callback?: Function): void => {
     const json = this._translationService.getJSON(fileName, this.state.translation);
 
-    const dialog = remote.require("dialog");
     const options = { filters: [
       { name: "Translation file", extensions: ["json"] }
     ]};
 
-    dialog.showSaveDialog(options, fileName => {
+    remote.dialog.showSaveDialog(null, options, fileName => {
       if (fileName) {
         fs.writeFile(fileName, json);
+      }
+      if (callback) {
+        callback();
       }
     });
   };

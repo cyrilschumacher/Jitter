@@ -21,12 +21,19 @@
  * SOFTWARE.
  */
 
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { I18nextProvider } from "react-i18next";
+import * as i18n from "i18next";
+import * as XHR from "i18next-xhr-backend";
+import * as LanguageDetector from "i18next-browser-languagedetector";
 
-import App from "./script/component/app";
-import i18n from "./script/i18n";
+const options = {
+  "dynamicLoad": true,
+  "fallbackLng": "en",
+  "defaultNS": "translation",
+  "ns": ["translation"],
+  "backend": {
+    "loadPath": "asset/locale/{{ns}}-{{lng}}.json"
+  }
+};
 
-const container = document.body;
-ReactDOM.render(<I18nextProvider i18n={i18n}><App /></I18nextProvider>, container);
+i18n.use(XHR).use(LanguageDetector).init(options);
+export default i18n;

@@ -81,6 +81,7 @@
   }
 
   &__body {
+    &__category,
     &__key,
     &__value {
       border: 1px solid $grid-header-text-color;

@@ -59,6 +59,47 @@ export default class TranslationService {
     return translation;
   };
 
+  /**
+   * Parse a file.
+   * @private
+   * @param data        The data.
+   * @param fileName    The file name.
+   * @param translation The translation.
+   * @return The translation.
+   */
+  private _parse = (data: Object, fileName: string, translation: TranslationModel): TranslationModel => {
+    for (let key in data) {
+      const value: string|Object = data[key];
+
+      if (typeof(value) === "string") {
+        let exists = _.filter(translation.items, item => item.key === key);
+        if (exists.length === 0) {
+          translation.items.push(new TranslationItemModel(key, new Array()));
+        }
+
+        let translationKey = _.filter(translation.items, item => item.key === key);
+        translationKey[0].values[fileName] = value;
+      } else {
+        let exists = _.filter(translation.categories, category => category.name === key);
+        if (exists.length === 0) {
+          translation.categories.push(new TranslationModel(key));
+        }
+
+        let category = _.filter(translation.categories, category => category.name === key);
+        this._parse(value, fileName, category[0]);
+      }
+    }
+
+    return translation;
+  };
+
+  /**
+   * Adds a new key.
+   * @param key         The key nam.
+   * @param files       The files.
+   * @param translation The translation.
+   * @return The translation.
+   */
   public addKey = (key: string, files: Array<TranslationFileModel>, translation: TranslationModel): TranslationModel => {
     let newItem = new TranslationItemModel(key, new Array());
     for (let file of files) {
@@ -71,30 +112,32 @@ export default class TranslationService {
   };
 
   /**
+   * Gets the JSON data by model.
+   * @param fileName      The file name.
+   * @param translation   The translation.
+   * @return The JSON data.
+   */
+  public getJSON = (fileName: string, translation: TranslationModel): string => {
+    let json = {};
+    for (const index in translation.items) {
+      const item = translation.items[index];
+      const value = item.values[fileName];
+      json[item.key] = value;
+    }
+
+    return JSON.stringify(json);
+  };
+
+  /**
    * Parse a file.
    * @param file        The file to parse.
    * @param files       The files.
    * @param translation The translation.
+   * @return The translation.
    */
   public parse = (file: TranslationFileModel, files: Array<TranslationFileModel>, translation: TranslationModel): TranslationModel => {
     translation = this._createTranslation("Default", translation);
-
-    for (let key in file.content) {
-      const value: string|Object = file.content[key];
-
-      if (typeof(value) === "string") {
-        let exists = _.filter(translation.items, item => item.key === key);
-        if (exists.length === 0) {
-          translation.items.push(new TranslationItemModel(key, new Array()));
-        }
-
-        let translationKey = _.filter(translation.items, item => item.key === key);
-        translationKey[0].values[file.name] = value;
-      }
-    }
-
-    translation = this._createDefaultKeyByFiles(translation, files);
-    return translation;
+    return this._parse(file.content, file.name, translation);
   };
 
   /**
@@ -108,16 +151,5 @@ export default class TranslationService {
     }
 
     return translation;
-  };
-
-  public getJSON = (fileName: string, translation: TranslationModel): string => {
-    let json = {};
-    for (const index in translation.items) {
-      const item = translation.items[index];
-      const value = item.values[fileName];
-      json[item.key] = value;
-    }
-
-    return JSON.stringify(json);
   };
 }

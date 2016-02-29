@@ -21,6 +21,7 @@
  * SOFTWARE.
  */
 
+import * as _ from "lodash";
 import * as fs from "fs";
 import * as React from "react";
 import * as LinkedStateMixin from "react-addons-linked-state-mixin";
@@ -90,31 +91,43 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
     }
   };
 
+  private _createDOMForElements = (items: Array<TranslationItemModel>): Array<JSX.Element> => {
+    return items.map((item, itemIndex) => {
+      let elements = new Array<JSX.Element>();
+      elements.push(<td><input className="grid__body__key" type="text" value={item.key}/></td>);
+
+      for (let file of this.state.files) {
+        const value = item.values[file.name];
+        elements.push(<td className={file.uuid}><input className="grid__body__value" type="text" value={value}/></td>);
+      }
+
+      return <tr class="grid__body">{elements}</tr>;
+    });
+  };
+
+  private _createDOMForTranslation = (translation: TranslationModel, elements?: Array<JSX.Element>): Array<JSX.Element> => {
+    if (!elements) {
+      elements = new Array<JSX.Element>();
+    }
+
+    this._createDOMForElements(translation.items).forEach(value => elements.push(value));
+
+    translation.categories.map(category => {
+      const colSpan = this.state.files.length + 1;
+      elements.push(<tr className="grid__body"><td className="grid__body__category" colSpan={colSpan}>{category.name}</td></tr>);
+      elements.concat(this._createDOMForTranslation(category, elements));
+    });
+
+    return elements;
+  };
+
   /**
    * Creates a body.
    * @private
    * @return The render.
    */
   private _createBody = (): any => {
-    return this.state.translation.items.map((item, itemIndex) => {
-      let line = [];
-      let typeItemLink = {
-        requestChange: this._updateKey.bind(null, itemIndex),
-        value: item.key
-      };
-      line.push(<td><input className="grid__body__key" type="text" valueLink={typeItemLink}/></td>);
-      for (let file of this.state.files) {
-        let typeValueLink = {
-          requestChange: this._updateValue.bind(null, itemIndex, file.name),
-          value: item.values[file.name]
-        };
-        line.push(<td className={file.uuid}><input className="grid__body__value" type="text" valueLink={typeValueLink}/></td>);
-      }
-
-      return (
-        <tr class="grid__body">{line}</tr>
-      );
-    });
+    return this._createDOMForTranslation(this.state.translation);
   };
 
   /**
@@ -147,11 +160,12 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
   };
 
   /**
-   * close a file.
+   * Closes a file.
+   * @private
    * @param uuid The UUID.
    */
   private _closeFile = (uuid: string): void => {
-    const options = {buttons: ["Yes", "No"], message: "Do you want to save your file before closing?", type: "question"};
+    const options = {buttons: ["Yes", "No"], message: "Do you want to save your file before closing?", "title": "Unsaved Changes", type: "question"};
     remote.dialog.showMessageBox(null, options, response => {
       if (!response) {
         const file = _.find(this.state.files, item => item.uuid === uuid);

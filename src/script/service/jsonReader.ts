@@ -25,43 +25,6 @@ import TranslateFileModel from "../model/translationFile";
 
 export default class JsonReader {
   /**
-   * Generates a UUID.
-   * @return The UUID.
-   */
-  private _generateUUID = (): string => {
-    let d = new Date().getTime();
-    const uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-        const r = (d + Math.random() * 16) % 16 | 0;
-        d = Math.floor(d / 16);
-        return ((c === "x") ? r : (r & 0x3 | 0x8)).toString(16);
-    });
-
-    return uuid;
-  };
-
-  /**
-   * Parse file content.
-   * @private
-   * @param {string} content The file content.
-   * @return {Object} The JSON object.
-   */
-  private _parseFileContent = (content: string): Object => {
-    return JSON.parse(content);
-  };
-
-  /**
-   * Reads many files.
-   * @param {FileList} files The files to read.
-   * @param {Function} callback The callback.
-   */
-  public readFiles = (files: FileList, callback: Function): void => {
-    for (let i = 0; i < files.length; i++) {
-      let file = files[i];
-      this.readFile(file, callback);
-    }
-  };
-
-  /**
    * Reads file.
    * @param {File} file The file to read.
    * @param {Function} callback The callback.
@@ -77,5 +40,42 @@ export default class JsonReader {
     };
 
     reader.readAsText(file, "utf-8");
+  };
+
+  /**
+   * Reads many files.
+   * @param {FileList} files The files to read.
+   * @param {Function} callback The callback.
+   */
+  public readFiles = (files: FileList, callback: Function): void => {
+    for (let i = 0; i < files.length; i++) {
+      let file = files[i];
+      this.readFile(file, callback);
+    }
+  };
+
+  /**
+   * Generates a UUID.
+   * @return The UUID.
+   */
+  private _generateUUID = (): string => {
+    let d = new Date().getTime();
+    const uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+      const r = (d + Math.random() * 16) % 16 | 0;
+      d = Math.floor(d / 16);
+      return ((c === "x") ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+
+    return uuid;
+  };
+
+  /**
+   * Parse file content.
+   * @private
+   * @param {string} content The file content.
+   * @return {Object} The JSON object.
+   */
+  private _parseFileContent = (content: string): Object => {
+    return JSON.parse(content);
   };
 }

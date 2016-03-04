@@ -14,3 +14,4 @@
 /// <reference path="jquery/jquery.d.ts" />
 /// <reference path="mime/mime.d.ts" />
 /// <reference path="serve-static/serve-static.d.ts" />
+/// <reference path="i18next-browser-languagedetector/i18next-browser-languagedetector.d.ts" />

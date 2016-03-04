@@ -1,13 +1,15 @@
 {
   "name": "jitter",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Edit your language files in JSON format with ease!",
   "repository": {
     "type": "git",
     "url": "https://github.com/cyrilschumacher/jitter.git"
   },
   "scripts": {
-    "start": "electron dist/main.js"
+    "release": "electron-packager ./dist Jitter --platform=all --arch=all --version=0.36.8",
+    "start": "electron dist/index.js",
+    "test": "mocha ./test/**/*.js"
   },
   "keywords": [
     "jitter",
@@ -20,10 +22,12 @@
   "license": "MIT",
   "electronVersion": "0.36.8",
   "devDependencies": {
+    "electron-packager": "^5.2.1",
     "electron-prebuilt": "^0.36.9",
     "gulp": "^3.9.1",
     "gulp-jade": "^1.1.0",
     "gulp-sass": "^2.2.0",
+    "gulp-tslint": "^4.3.3",
     "gulp-typescript": "^2.11.0",
     "typescript": "^1.7.5"
   },

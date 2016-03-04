@@ -28,26 +28,62 @@ import TranslationItemModel from "../model/translationItem";
 
 export default class TranslationService {
   /**
-   * Creates default key by files.
-   * @param translation The translation.
+   * Adds a new key.
+   * @param key         The key nam.
    * @param files       The files.
-   * @return The updated translation.
+   * @param translation The translation.
+   * @return The translation.
    */
-  private _createDefaultKeyByFiles = (translation: TranslationModel, files: Array<TranslationFileModel>): TranslationModel => {
-    for (let index in translation.items) {
-      for (let file of files) {
-        let value: string = translation.items[index].values[file.name];
-        if (!value) {
-          translation.items[index].values[file.name] = "";
-        }
-      }
-    }
+  public addKey = (key: string, files: Array<TranslationFileModel>, translation: TranslationModel): TranslationModel => {
+    let newItem = new TranslationItemModel(key, new Array());
+    _.forEach(files, file => {
+      newItem.values[file.name] = "";
+    });
 
+    translation.items.push(newItem);
+    return translation;
+  };
+
+  /**
+   * Gets the JSON data by model.
+   * @param translation   The translation.
+   * @param fileName      The file name.
+   * @return The JSON data.
+   */
+  public getJSON = (translation: TranslationModel, fileName: string): string => {
+    let json = {};
+    this._getJSON(translation, fileName, json);
+    return JSON.stringify(json);
+  };
+
+  /**
+   * Parse a file.
+   * @param translation The translation.
+   * @param file        The file to parse.
+   * @param files       The files.
+   * @param defaultName The default category name.
+   * @return The translation.
+   */
+  public parse = (translation: TranslationModel, file: TranslationFileModel, files: Array<TranslationFileModel>, defaultName?: string): TranslationModel => {
+    defaultName = defaultName || "Default";
+
+    translation = this._createTranslation(defaultName, translation);
+    return this._parse(file.content, translation, file.name);
+  };
+
+  /**
+   * Remove a file in translation.
+   * @param file        The file to parse.
+   * @param translation The translation.
+   */
+  public removeFile = (translation: TranslationModel, fileName: string): TranslationModel => {
+    translation.items.forEach(item => this._removeFile(item, fileName));
     return translation;
   };
 
   /**
    * Create a translation.
+   * @private
    * @param categoryName  The category name.
    * @param translation   The model.
    */
@@ -60,96 +96,82 @@ export default class TranslationService {
   };
 
   /**
-   * Parse a file.
-   * @private
-   * @param data        The data.
-   * @param fileName    The file name.
-   * @param translation The translation.
-   * @return The translation.
-   */
-  private _parse = (data: Object, fileName: string, translation: TranslationModel): TranslationModel => {
-    for (let key in data) {
-      const value: string|Object = data[key];
-
-      if (typeof(value) === "string") {
-        let exists = _.filter(translation.items, item => item.key === key);
-        if (exists.length === 0) {
-          translation.items.push(new TranslationItemModel(key, new Array()));
-        }
-
-        let translationKey = _.filter(translation.items, item => item.key === key);
-        translationKey[0].values[fileName] = value;
-      } else {
-        let exists = _.filter(translation.categories, category => category.name === key);
-        if (exists.length === 0) {
-          translation.categories.push(new TranslationModel(key));
-        }
-
-        let category = _.filter(translation.categories, category => category.name === key);
-        this._parse(value, fileName, category[0]);
-      }
-    }
-
-    return translation;
-  };
-
-  /**
-   * Adds a new key.
-   * @param key         The key nam.
-   * @param files       The files.
-   * @param translation The translation.
-   * @return The translation.
-   */
-  public addKey = (key: string, files: Array<TranslationFileModel>, translation: TranslationModel): TranslationModel => {
-    let newItem = new TranslationItemModel(key, new Array());
-    for (let file of files) {
-      let value: string = newItem.values[file.name];
-      newItem.values[file.name] = "";
-    }
-
-    translation.items.push(newItem);
-    return translation;
-  };
-
-  /**
    * Gets the JSON data by model.
+   * @private
    * @param fileName      The file name.
    * @param translation   The translation.
-   * @return The JSON data.
+   * @param json          The JSON object.
    */
-  public getJSON = (fileName: string, translation: TranslationModel): string => {
-    let json = {};
-    for (const index in translation.items) {
-      const item = translation.items[index];
+  private _getJSON = (translation: TranslationModel, fileName: string, json: Object): void => {
+    _.forEach(translation.items, item => {
       const value = item.values[fileName];
       json[item.key] = value;
+    });
+
+    _.forEach(translation.categories, category => {
+      json[category.name] = {};
+      this._getJSON(category, fileName, json[category.name]);
+    });
+  };
+
+  /**
+   * Parse key in file.
+   * @param translation The translation.
+   * @param fileName    The file name.
+   */
+  private _parseKey = (items: Array<TranslationItemModel>, fileName: string, key: string, value: string): void => {
+    let matches = _.some(items, item => item.key === key);
+    if (!matches) {
+      items.push(new TranslationItemModel(key, new Array()));
     }
 
-    return JSON.stringify(json);
+    let translationKey = _.filter(items, item => item.key === key);
+    translationKey[0].values[fileName] = value;
+  };
+
+  /**
+   * Parse category in file.
+   * @param translation The translation.
+   * @param key         The key.
+   * @return The category.
+   */
+  private _getExistingCategory = (translation: TranslationModel, key: string): TranslationModel => {
+    const matches = _.some(translation.categories, category => category.name === key);
+    if (!matches) {
+      translation.categories.push(new TranslationModel(key));
+    }
+
+    return _.find(translation.categories, category => category.name === key);
   };
 
   /**
    * Parse a file.
-   * @param file        The file to parse.
-   * @param files       The files.
+   * @private
+   * @param json        The JSON data.
    * @param translation The translation.
+   * @param fileName    The file name.
    * @return The translation.
    */
-  public parse = (file: TranslationFileModel, files: Array<TranslationFileModel>, translation: TranslationModel): TranslationModel => {
-    translation = this._createTranslation("Default", translation);
-    return this._parse(file.content, file.name, translation);
+  private _parse = (json: Object, translation: TranslationModel, fileName: string): TranslationModel => {
+    _.forEach(json, (value, key) => {
+      if (typeof (value) === "string") {
+        this._parseKey(translation.items, fileName, key, <string> value);
+      } else {
+        const category = this._getExistingCategory(translation, key);
+        this._parse(value, category, fileName);
+      }
+    });
+
+    return translation;
   };
 
   /**
-   * Remove a file in translation.
-   * @param file        The file to parse.
-   * @param translation The translation.
+   * Remove file in translation item.
+   * @private
+   * @param item      The translation item.
+   * @param fileName  The file name to remove.
    */
-  public removeFile = (fileName: string, translation: TranslationModel): TranslationModel => {
-    for (let index in translation.items) {
-      delete translation.items[index].values[fileName];
-    }
-
-    return translation;
+  private _removeFile = (item: TranslationItemModel, fileName: string): void => {
+    delete item.values[fileName];
   };
 }

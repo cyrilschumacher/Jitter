@@ -21,8 +21,6 @@
  * SOFTWARE.
  */
 
-import TranslationItem from "./translationItem";
-
 /**
  * Represents the translation file.
  * @class

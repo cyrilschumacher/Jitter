@@ -12,7 +12,7 @@
       "commit": "b10e5ade29708bb0a7d21916a9fe289973520e89"
     },
     "node/node.d.ts": {
-      "commit": "b10e5ade29708bb0a7d21916a9fe289973520e89"
+      "commit": "9f0f926a12026287b5a4a229e5672c01e7549313"
     },
     "react/react.d.ts": {
       "commit": "163a4277199c3d896d9efffe24ea84c85f55c8ac"
@@ -33,25 +33,28 @@
       "commit": "163a4277199c3d896d9efffe24ea84c85f55c8ac"
     },
     "i18next/i18next.d.ts": {
-      "commit": "b10e5ade29708bb0a7d21916a9fe289973520e89"
+      "commit": "9f0f926a12026287b5a4a229e5672c01e7549313"
     },
     "serve-static/serve-static.d.ts": {
-      "commit": "b10e5ade29708bb0a7d21916a9fe289973520e89"
+      "commit": "9f0f926a12026287b5a4a229e5672c01e7549313"
     },
     "mime/mime.d.ts": {
-      "commit": "b10e5ade29708bb0a7d21916a9fe289973520e89"
+      "commit": "9f0f926a12026287b5a4a229e5672c01e7549313"
     },
     "i18next-sprintf-postprocessor/i18next-sprintf-postprocessor.d.ts": {
-      "commit": "b10e5ade29708bb0a7d21916a9fe289973520e89"
+      "commit": "9f0f926a12026287b5a4a229e5672c01e7549313"
     },
     "i18next-express-middleware/i18next-express-middleware.d.ts": {
-      "commit": "b10e5ade29708bb0a7d21916a9fe289973520e89"
+      "commit": "9f0f926a12026287b5a4a229e5672c01e7549313"
     },
     "express/express.d.ts": {
-      "commit": "b10e5ade29708bb0a7d21916a9fe289973520e89"
+      "commit": "9f0f926a12026287b5a4a229e5672c01e7549313"
     },
     "jquery/jquery.d.ts": {
-      "commit": "b10e5ade29708bb0a7d21916a9fe289973520e89"
+      "commit": "9f0f926a12026287b5a4a229e5672c01e7549313"
+    },
+    "i18next-browser-languagedetector/i18next-browser-languagedetector.d.ts": {
+      "commit": "9f0f926a12026287b5a4a229e5672c01e7549313"
     }
   }
 }

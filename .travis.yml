@@ -8,3 +8,4 @@ install:
   - npm install
   - tsd install
 before_script: gulp
+script: npm test

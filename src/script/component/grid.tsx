@@ -156,7 +156,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
         elements.push(<td className={file.uuid}><input className="grid__body__value" type="text" valueLink={value}/></td>);
       }
 
-      return <tr class="grid__body">{elements}</tr>;
+      return <tr className="grid__body">{elements}</tr>;
     });
   };
 
@@ -194,7 +194,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
     let _grid = this;
     return this.state.files.map(file => {
       let saveHandler = _grid._saveFile.bind(this, file.name);
-      let closeHandler = _grid._closeFile.bind(this, file.uuid);
+      let closeHandler = _grid._closeFile.bind(this, file);
       let headerClass = "grid__header__file " + file.uuid;
       return (
         <th className={headerClass}>
@@ -219,7 +219,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
    * @private
    * @param uuid The UUID.
    */
-  private _closeFile = (uuid: string): void => {
+  private _closeFile = (file: TranslationFileModel): void => {
     const options = {
       buttons: ["Yes", "No"],
       message: "Do you want to save your file before closing?",
@@ -227,20 +227,16 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
       type: "question"
     };
     remote.dialog.showMessageBox(null, options, response => {
-      const file = _.find(this.state.files, item => item.uuid === uuid);
       if (!response) {
-        this._saveFile(file.name, () => {
-          let elements = document.getElementsByClassName(uuid);
-          while (elements.length > 0) {
-              elements[0].parentNode.removeChild(elements[0]);
-          }
-        });
+        this._saveFile(file.name);
       }
 
-      this._translationService.removeFile(this.state.translation, file.name);
-      let elements = document.getElementsByClassName(uuid);
-      while (elements.length > 0) {
-        elements[0].parentNode.removeChild(elements[0]);
+      if (this.state.files.length > 1) {
+          _.remove(this.state.files, item => item.uuid === file.uuid);
+          this._translationService.removeFile(this.state.translation, file.name);
+          this.setState({files: this.state.files, translation: this.state.translation});
+      } else {
+        this.setState({files: [], translation: undefined});
       }
     });
   };

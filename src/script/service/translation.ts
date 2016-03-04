@@ -73,12 +73,12 @@ export default class TranslationService {
 
   /**
    * Remove a file in translation.
-   * @param file        The file to parse.
    * @param translation The translation.
+   * @param file        The file to parse.
    */
-  public removeFile = (translation: TranslationModel, fileName: string): TranslationModel => {
+  public removeFile = (translation: TranslationModel, fileName: string): void => {
     translation.items.forEach(item => this._removeFile(item, fileName));
-    return translation;
+    translation.categories.forEach(category => this.removeFile(category, fileName));
   };
 
   /**

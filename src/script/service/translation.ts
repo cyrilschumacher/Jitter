@@ -50,21 +50,21 @@ export default class TranslationService {
    * @param fileName      The file name.
    * @return The JSON data.
    */
-  public getJSON = (translation: TranslationModel, fileName: string): string => {
+  public getJSON = (translation: TranslationModel, fileName: string): Object => {
     let json = {};
     this._getJSON(translation, fileName, json);
-    return JSON.stringify(json);
+
+    return json;
   };
 
   /**
    * Parse a file.
    * @param translation The translation.
    * @param file        The file to parse.
-   * @param files       The files.
    * @param defaultName The default category name.
-   * @return The translation.
+   * @return The new translation.
    */
-  public parse = (translation: TranslationModel, file: TranslationFileModel, files: Array<TranslationFileModel>, defaultName?: string): TranslationModel => {
+  public parse = (file: TranslationFileModel, translation?: TranslationModel, defaultName?: string): TranslationModel => {
     defaultName = defaultName || "Default";
 
     translation = this._createTranslation(defaultName, translation);

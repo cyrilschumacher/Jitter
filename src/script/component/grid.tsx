@@ -74,7 +74,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
   constructor(props: IGridComponentProps) {
     super(props);
     this._translationService = new TranslationService();
-    this.state = {files: [], newKey: ""};
+    this.state = {files: []};
   };
 
   /**
@@ -86,7 +86,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
       const matches = _.some(this.state.files, item => item.name === file.name);
       if (!matches) {
         this.state.files.push(file);
-        this.state.translation = this._translationService.parse(this.state.translation, file, this.state.files);
+        this.state.translation = this._translationService.parse(file, this.state.translation);
         this.forceUpdate();
       }
   };
@@ -252,7 +252,8 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
    * @param callback The callback. This parameter is optional.
    */
   private _saveFile = (fileName: string, callback?: Function): void => {
-    const json = this._translationService.getJSON(this.state.translation, fileName);
+    const value = this._translationService.getJSON(this.state.translation, fileName);
+    const json = JSON.stringify(value);
 
     const options = { filters: [
       {  extensions: ["json"], name: "Translation file" }

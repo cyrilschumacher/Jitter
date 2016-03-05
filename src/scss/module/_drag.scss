@@ -70,11 +70,9 @@
     }
 
     &__subtitle {
-      color: $gray-light;
       font-weight: 300;
 
       &__browse {
-        color: $link-color;
         cursor: pointer;
         font-weight: 700;
 
@@ -86,7 +84,6 @@
     }
 
     &__title {
-      color: $link-color;
       font-weight: 700;
       margin: 0 0 1rem;
     }

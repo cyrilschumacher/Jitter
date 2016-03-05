@@ -36,7 +36,6 @@ import TranslationService from "../service/translation";
  * @interface
  */
 interface IGridComponentState {
-  newKey?: string;
 }
 
 /**
@@ -44,6 +43,7 @@ interface IGridComponentState {
  * @interface
  */
 interface IGridComponentProps {
+  addKey?: (category: TranslationModel, key: string) => void;
   files?: Array<TranslationFileModel>;
   translation?: TranslationModel;
   removeFile?: (file: TranslationFileModel) => void;
@@ -89,7 +89,6 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
     let header;
     let body;
     let fileHeader;
-    let typeItemLink = {requestChange: this._updateNewKey, value: this.state.newKey};
 
     if (this.props.translation) {
       header = this._createHeader();
@@ -112,27 +111,8 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
           </thead>
           <tbody>{body}</tbody>
         </table>
-        <footer>
-          <input valueLink={typeItemLink} type="text"/>
-          <button onClick={this._addKey}>
-            <i className="ion-ios-plus-outline"></i>
-            <span>Add key</span>
-          </button>
-        </footer>
       </div>
     );
-  };
-
-  /**
-   * Add a new key.
-   * @private
-   */
-  private _addKey = (): void => {
-    if (this.state.newKey) {
-      this.props.translation = this._translationService.addKey(this.state.newKey, this.props.files, this.props.translation);
-      this.setState({newKey: ""});
-      this.forceUpdate();
-    }
   };
 
   private _createValueLink = (requestChange: Function, value: string): Object => {
@@ -160,6 +140,10 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
     }
 
     this._createDOMForElements(translation.items).forEach(value => elements.push(value));
+
+    if (elements.length > 0) {
+      elements.push(<tr><td colSpan={this.props.files.length + 1}><button onClick={this.props.addKey.bind(null, translation)}>Add key</button></td></tr>);
+    }
 
     translation.categories.map(category => {
       const colSpan = this.props.files.length + 1;
@@ -262,14 +246,5 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
         callback();
       }
     });
-  };
-
-  /**
-   * Updates a new key.
-   * @private
-   * @param value       The new value.
-   */
-  private _updateNewKey = (value): void => {
-    this.setState({newKey: value});
   };
 }

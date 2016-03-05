@@ -29,12 +29,13 @@ import TranslationItemModel from "../model/translationItem";
 export default class TranslationService {
   /**
    * Adds a new key.
-   * @param key         The key nam.
    * @param files       The files.
    * @param translation The translation.
    * @return The translation.
    */
-  public addKey = (key: string, files: Array<TranslationFileModel>, translation: TranslationModel): TranslationModel => {
+  public addKey = (translation: TranslationModel, files: Array<TranslationFileModel>, key?: string): TranslationModel => {
+    key = key || "";
+
     let newItem = new TranslationItemModel(key, new Array());
     _.forEach(files, file => {
       newItem.values[file.name] = "";

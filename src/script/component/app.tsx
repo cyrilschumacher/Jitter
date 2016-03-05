@@ -105,7 +105,7 @@ export default class App extends React.Component<IDragComponentProps, IAppCompon
           <Drag addFile={this._addFile} browse={this._browse}/>
         </div>
         <div className={gridClass}>
-          <Grid files={this.state.files} translation={this.state.translation} removeFile={this._removeFile} updateCategoryName={this._updateCategoryName} updateKey={this._updateKey} updateValue={this._updateValue}/>
+          <Grid files={this.state.files} translation={this.state.translation} addKey={this._addKey} removeFile={this._removeFile} updateCategoryName={this._updateCategoryName} updateKey={this._updateKey} updateValue={this._updateValue}/>
         </div>
       </div>
     );
@@ -174,13 +174,24 @@ export default class App extends React.Component<IDragComponentProps, IAppCompon
   };
 
   /**
-   * Remove file.
+   * Removes file.
    * @private
    * @param {TranslationFileModel} file The file to delete.
    */
   private _removeFile = (file: TranslationFileModel): void => {
     _.remove(this.state.files, item => item.uuid === file.uuid);
     this.setState({files: this.state.files});
+  };
+
+  /**
+   * Adds key in category.
+   * @private
+   * @param {TranslationModel} category The category.
+   * @param {string}           key      The key.
+   */
+  private _addKey = (category: TranslationModel): void => {
+    this._translationService.addKey(category, this.state.files);
+    this.setState({translation: this.state.translation});
   };
 
   /**

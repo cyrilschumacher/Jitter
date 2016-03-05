@@ -98,27 +98,33 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
   public render(): React.ReactElement<any> {
     let header;
     let body;
+    let fileHeader;
     let typeItemLink = {requestChange: this._updateNewKey, value: this.state.newKey};
 
     if (this.state.translation) {
       header = this._createHeader();
+      fileHeader = this._createFileHeader();
       body = this._createBody();
     }
 
     return (
       <div className="grid">
-        <table>
+        <table className="table table-striped table-hover">
           <thead>
-            <tr className="grid__header">
-              <th className="grid__header__key">Key</th>
+            <tr>
+              <th className="text-center">Key</th>
+                {fileHeader}
+            </tr>
+            <tr>
+              <th></th>
               {header}
             </tr>
           </thead>
           <tbody>{body}</tbody>
         </table>
-        <footer className="grid__footer">
-          <input className="grid__footer__add-input" valueLink={typeItemLink} type="text"/>
-          <button className="grid__footer__add-button" onClick={this._addKey}>
+        <footer>
+          <input valueLink={typeItemLink} type="text"/>
+          <button onClick={this._addKey}>
             <i className="ion-ios-plus-outline"></i>
             <span>Add key</span>
           </button>
@@ -146,17 +152,17 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
         requestChange: this._updateKey.bind(null, item),
         value: item.key
       };
-      elements.push(<td><input className="grid__body__key" type="text" valueLink={keyValue}/></td>);
+      elements.push(<td><input className="form-control" type="text" valueLink={keyValue}/></td>);
 
       for (let file of this.state.files) {
         const value = {
           requestChange: this._updateValue.bind(null, item.values, file.name),
           value: item.values[file.name]
         };
-        elements.push(<td className={file.uuid}><input className="grid__body__value" type="text" valueLink={value}/></td>);
+        elements.push(<td className={file.uuid}><input className="form-control" type="text" valueLink={value}/></td>);
       }
 
-      return <tr className="grid__body">{elements}</tr>;
+      return <tr>{elements}</tr>;
     });
   };
 
@@ -169,7 +175,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
 
     translation.categories.map(category => {
       const colSpan = this.state.files.length + 1;
-      elements.push(<tr className="grid__body"><td className="grid__body__category" colSpan={colSpan}>{category.name}</td></tr>);
+      elements.push(<tr><td colSpan={colSpan}>{category.name}</td></tr>);
       elements.concat(this._createDOMForTranslation(category, elements));
     });
 
@@ -195,20 +201,29 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
     return this.state.files.map(file => {
       let saveHandler = _grid._saveFile.bind(this, file.name);
       let closeHandler = _grid._closeFile.bind(this, file);
-      let headerClass = "grid__header__file " + file.uuid;
       return (
-        <th className={headerClass}>
-          <span className="grid__header__file__name">{file.name}</span>
-          <div className="grid__header__file__action">
-            <button onClick={saveHandler}>
-              <i className="ion-ios-download-outline"></i>
-            </button>
+        <th>
+          <div className="text-center">
+            <div className="btn-group">
+              <button className="btn btn-primary" onClick={saveHandler}>Save</button>
+              <button className="btn btn-danger" onClick={closeHandler}>Close</button>
+            </div>
           </div>
-          <div className="grid__header__file__action">
-            <button onClick={closeHandler}>
-              <i className="ion-ios-trash-outline"></i>
-            </button>
-          </div>
+        </th>
+      );
+    });
+  };
+
+  /**
+   * Creates a header.
+   * @private
+   * @return The render.
+   */
+  private _createFileHeader = (): any => {
+    return this.state.files.map(file => {
+      return (
+        <th className="text-center">
+          <span>{file.name}</span>
         </th>
       );
     });

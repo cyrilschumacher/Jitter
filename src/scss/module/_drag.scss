@@ -20,8 +20,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-.1rem, 0, 0) scale(1.5);
+  }
+
+  20%, 80% {
+    transform: translate3d(.2rem, 0, 0) scale(1.5);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-.4rem, 0, 0) scale(1.5);
+  }
+
+  40%, 60% {
+    transform: translate3d(.4rem, 0, 0) scale(1.5);
+  }
+}
+
 .drag {
-  background: $drag-background-color;
+  background: $gray-lighter;
   border-radius: 10px;
   bottom: 0;
   display: table;
@@ -39,22 +57,24 @@
   }
 
   &__container {
-    border: .2rem dashed $drag-border-color;
+    border: .2rem dashed $gray;
     border-radius: 10px;
     display: table-cell;
     text-align: center;
     vertical-align: middle;
 
-    &__logo {
+    &__icon {
+      color: $link-color;
+      font-size: 10rem;
       transition: 100ms transform;
     }
 
     &__subtitle {
-      color: $drag-subtitle-color;
+      color: $gray-light;
       font-weight: 300;
 
       &__browse {
-        color: $drag-subtitle-color;
+        color: $link-color;
         cursor: pointer;
         font-weight: 700;
 
@@ -66,7 +86,7 @@
     }
 
     &__title {
-      color: $drag-title-color;
+      color: $link-color;
       font-weight: 700;
       margin: 0 0 1rem;
     }
@@ -75,14 +95,15 @@
   &--over {
     .drag {
       &__container {
-        border-color: $drag-over-border-color;
+        border-color: $brand-primary;
 
-        &__logo {
-          transform: scale(1.1);
+        &__icon {
+          animation: shake 750ms cubic-bezier(.36, .07, .19, .97) both;
+          color: $brand-primary;
         }
 
         &__title {
-          color: $drag-over-border-color;
+          color: $brand-primary;
         }
       }
     }

@@ -28,13 +28,14 @@ import * as classNames from "classnames";
 import Drag from "./drag";
 import Grid from "./grid";
 import JsonReader from "../service/jsonReader";
+import TranslationFileModel from "../model/translationFile";
 
 /**
  * Interface for component state.
  * @interface
  */
 interface IAppComponentState {
-  hasFiles?: boolean;
+  files?: Array<TranslationFileModel>;
   isDragged?: boolean;
 }
 
@@ -43,7 +44,6 @@ interface IAppComponentState {
  * @interface
  */
 interface IDragComponentProps {
-  addFile: any;
 }
 
 /**
@@ -51,20 +51,13 @@ interface IDragComponentProps {
  * @class
  * @extends React.Component
  */
-export default class App extends React.Component<Object, IAppComponentState> {
+export default class App extends React.Component<IDragComponentProps, IAppComponentState> {
   /**
-   * Default properties.
-   * @static
-   */
-  public static defaultProps: Object = {};
-
-  /**
-   * Default properties.
+   * Default references.
    * @static
    */
   public refs: {
-    [ref: string]: React.Component<any, any>;
-    gridComponent: Grid
+    [ref: string]: React.Component<any, any>
   };
 
   /**
@@ -82,10 +75,15 @@ export default class App extends React.Component<Object, IAppComponentState> {
     super(props);
 
     this._jsonReader = new JsonReader();
-    this.state = {
-      hasFiles: false,
-      isDragged: false
-    };
+    this.state = this.getInitialState();
+  };
+
+  /**
+   * Invoked once before the component is mounted.
+   * @return {IAppComponentState} The initial value.
+   */
+  public getInitialState(): IAppComponentState {
+    return { files: [] };
   };
 
   /**
@@ -96,12 +94,12 @@ export default class App extends React.Component<Object, IAppComponentState> {
     let dragClass = classNames({
       "drag": true,
       "drag--over": this.state.isDragged,
-      "hidden": this.state.hasFiles
+      "hidden": this.state.files.length > 0
     });
 
     let gridClass = classNames({
       "grid": true,
-      "hidden": !this.state.hasFiles
+      "hidden": this.state.files.length === 0
     });
 
     return (
@@ -110,7 +108,7 @@ export default class App extends React.Component<Object, IAppComponentState> {
           <Drag addFile={this._addFile} browse={this._browse}/>
         </div>
         <div className={gridClass}>
-          <Grid ref="gridComponent"/>
+          <Grid files={this.state.files} removeFile={this._removeFile}/>
         </div>
       </div>
     );
@@ -119,12 +117,15 @@ export default class App extends React.Component<Object, IAppComponentState> {
   /**
    * Add file.
    * @private
-   * @param {any}   file  The file.
-   * @param {Array} files The files.
+   * @param {any}       file  The file.
+   * @param {FileList}  files The files.
    */
-  private _addFile = (file: any, files: Array<File>): void => {
-    this.setState({hasFiles: true, isDragged: this.state.isDragged});
-    this.refs.gridComponent.addFile(file, files);
+  private _addFile = (file: any, files: FileList): void => {
+      const matches = _.some(this.state.files, item => item.name === file.name);
+      if (!matches) {
+        this.state.files.push(file);
+        this.setState({isDragged: this.state.isDragged});
+      }
   };
 
   /**
@@ -132,10 +133,10 @@ export default class App extends React.Component<Object, IAppComponentState> {
    * @private
    */
   private _browse = (): void => {
-    const browseElement = document.getElementById("browse");
+    const browseElement = document.getElementById("browse") as HTMLInputElement;
     browseElement.click();
 
-    const files = browseElement["files"];
+    const files = browseElement.files;
     this._jsonReader.readFiles(files, result => {
       this._addFile(result, files);
     });
@@ -174,5 +175,15 @@ export default class App extends React.Component<Object, IAppComponentState> {
         this._addFile(result, files);
       });
     }
+  };
+
+  /**
+   * Remove file.
+   * @private
+   * @param {TranslationFileModel} file The file to delete.
+   */
+  private _removeFile = (file: TranslationFileModel): void => {
+    _.remove(this.state.files, item => item.uuid === file.uuid);
+    this.setState({files: this.state.files});
   };
 }

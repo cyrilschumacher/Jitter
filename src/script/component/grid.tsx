@@ -36,7 +36,6 @@ import TranslationService from "../service/translation";
  * @interface
  */
 interface IGridComponentState {
-  files?: Array<TranslationFileModel>;
   newKey?: string;
   translation?: TranslationModel;
 }
@@ -46,6 +45,8 @@ interface IGridComponentState {
  * @interface
  */
 interface IGridComponentProps {
+  files?: Array<TranslationFileModel>;
+  removeFile?: (file: TranslationFileModel) => void;
 }
 
 /**
@@ -74,21 +75,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
   constructor(props: IGridComponentProps) {
     super(props);
     this._translationService = new TranslationService();
-    this.state = {files: []};
-  };
-
-  /**
-   * Adds a translation file.
-   * @param {Object}  file  The file to add.
-   * @param {Array}   files The files.
-   */
-  public addFile = (file: TranslationFileModel, files: Array<File>): void => {
-      const matches = _.some(this.state.files, item => item.name === file.name);
-      if (!matches) {
-        this.state.files.push(file);
-        this.state.translation = this._translationService.parse(file, this.state.translation);
-        this.forceUpdate();
-      }
+    this.state = {};
   };
 
   /**
@@ -101,6 +88,9 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
     let fileHeader;
     let typeItemLink = {requestChange: this._updateNewKey, value: this.state.newKey};
 
+    for (const file of this.props.files) {
+      this.state.translation = this._translationService.parse(file, this.state.translation);
+    }
     if (this.state.translation) {
       header = this._createHeader();
       fileHeader = this._createFileHeader();
@@ -138,8 +128,8 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
    * @private
    */
   private _addKey = (): void => {
-    if (this.state.newKey !== "") {
-      this.state.translation = this._translationService.addKey(this.state.newKey, this.state.files, this.state.translation);
+    if (this.state.newKey) {
+      this.state.translation = this._translationService.addKey(this.state.newKey, this.props.files, this.state.translation);
       this.setState({newKey: ""});
       this.forceUpdate();
     }
@@ -154,7 +144,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
       };
       elements.push(<td><input className="form-control" type="text" valueLink={keyValue}/></td>);
 
-      for (let file of this.state.files) {
+      for (let file of this.props.files) {
         const value = {
           requestChange: this._updateValue.bind(null, item.values, file.name),
           value: item.values[file.name]
@@ -174,7 +164,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
     this._createDOMForElements(translation.items).forEach(value => elements.push(value));
 
     translation.categories.map(category => {
-      const colSpan = this.state.files.length + 1;
+      const colSpan = this.props.files.length + 1;
       elements.push(<tr><td colSpan={colSpan}>{category.name}</td></tr>);
       elements.concat(this._createDOMForTranslation(category, elements));
     });
@@ -198,7 +188,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
    */
   private _createHeader = (): any => {
     let _grid = this;
-    return this.state.files.map(file => {
+    return this.props.files.map(file => {
       let saveHandler = _grid._saveFile.bind(this, file.name);
       let closeHandler = _grid._closeFile.bind(this, file);
       return (
@@ -220,7 +210,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
    * @return The render.
    */
   private _createFileHeader = (): any => {
-    return this.state.files.map(file => {
+    return this.props.files.map(file => {
       return (
         <th className="text-center">
           <span>{file.name}</span>
@@ -246,12 +236,12 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
         this._saveFile(file.name);
       }
 
-      if (this.state.files.length > 1) {
-          _.remove(this.state.files, item => item.uuid === file.uuid);
-          this._translationService.removeFile(this.state.translation, file.name);
-          this.setState({files: this.state.files, translation: this.state.translation});
+      this.props.removeFile(file);
+      this._translationService.removeFile(this.state.translation, file.name);
+      if (this.props.files.length > 1) {
+          this.setState({translation: this.state.translation});
       } else {
-        this.setState({files: [], translation: undefined});
+        this.setState({translation: undefined});
       }
     });
   };

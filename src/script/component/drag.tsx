@@ -44,14 +44,13 @@ class Drag extends React.Component<any, any> {
    * @return The reference to the component.
    */
   public render(): React.ReactElement<any> {
-    const t = this.props.t;
     return (
       <div className="drag__container">
         <i className="drag__container__icon ion-document-text"></i>
-        <h1 className="drag__container__title">{t("drag.title")}</h1>
+        <h1 className="drag__container__title">{this.props.t("drag.title")}</h1>
         <span className="drag__container__subtitle">
-          <span>{t("drag.subtitle")}</span>
-          <a className="drag__container__subtitle__browse" onClick={this.props.browse}>{t("drag.browse")}</a>.
+          <span>{this.props.t("drag.subtitle")}</span>
+          <a className="drag__container__subtitle__browse" onClick={this.props.browse}>{this.props.t("drag.browse")}</a>.
         </span>
         <input className="drag__browse-input" id="browse" type="file" accept=".json" multiple/>
       </div>

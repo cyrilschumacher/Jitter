@@ -27,8 +27,13 @@ import * as classNames from "classnames";
 
 import Drag from "./drag";
 import Grid from "./grid";
+
 import JsonReader from "../service/jsonReader";
+import TranslationService from "../service/translation";
+
+import TranslationModel from "../model/translation";
 import TranslationFileModel from "../model/translationFile";
+import TranslationItemModel from "../model/translationItem";
 
 /**
  * Interface for component state.
@@ -37,6 +42,7 @@ import TranslationFileModel from "../model/translationFile";
 interface IAppComponentState {
   files?: Array<TranslationFileModel>;
   isDragged?: boolean;
+  translation?: TranslationModel;
 }
 
 /**
@@ -53,18 +59,16 @@ interface IDragComponentProps {
  */
 export default class App extends React.Component<IDragComponentProps, IAppComponentState> {
   /**
-   * Default references.
-   * @static
-   */
-  public refs: {
-    [ref: string]: React.Component<any, any>
-  };
-
-  /**
    * JSON reader.
    * @private
    */
   private _jsonReader: JsonReader;
+
+  /**
+   * Translation service.
+   * @private
+   */
+  private _translationService: TranslationService;
 
   /**
    * Constructor.
@@ -75,15 +79,8 @@ export default class App extends React.Component<IDragComponentProps, IAppCompon
     super(props);
 
     this._jsonReader = new JsonReader();
-    this.state = this.getInitialState();
-  };
-
-  /**
-   * Invoked once before the component is mounted.
-   * @return {IAppComponentState} The initial value.
-   */
-  public getInitialState(): IAppComponentState {
-    return { files: [] };
+    this._translationService = new TranslationService();
+    this.state = { files: [] };
   };
 
   /**
@@ -91,13 +88,13 @@ export default class App extends React.Component<IDragComponentProps, IAppCompon
    * @return {any} The reference to the component.
    */
   public render(): React.ReactElement<{}> {
-    let dragClass = classNames({
+    const dragClass = classNames({
       "drag": true,
       "drag--over": this.state.isDragged,
       "hidden": this.state.files.length > 0
     });
 
-    let gridClass = classNames({
+    const gridClass = classNames({
       "grid": true,
       "hidden": this.state.files.length === 0
     });
@@ -108,7 +105,7 @@ export default class App extends React.Component<IDragComponentProps, IAppCompon
           <Drag addFile={this._addFile} browse={this._browse}/>
         </div>
         <div className={gridClass}>
-          <Grid files={this.state.files} removeFile={this._removeFile}/>
+          <Grid files={this.state.files} translation={this.state.translation} removeFile={this._removeFile} updateCategoryName={this._updateCategoryName} updateKey={this._updateKey} updateValue={this._updateValue}/>
         </div>
       </div>
     );
@@ -120,10 +117,12 @@ export default class App extends React.Component<IDragComponentProps, IAppCompon
    * @param {any}       file  The file.
    * @param {FileList}  files The files.
    */
-  private _addFile = (file: any, files: FileList): void => {
+  private _addFile = (file: TranslationFileModel, files: FileList): void => {
       const matches = _.some(this.state.files, item => item.name === file.name);
       if (!matches) {
+        this.state.translation = this._translationService.parse(file, this.state.translation);
         this.state.files.push(file);
+
         this.setState({isDragged: this.state.isDragged});
       }
   };
@@ -137,9 +136,7 @@ export default class App extends React.Component<IDragComponentProps, IAppCompon
     browseElement.click();
 
     const files = browseElement.files;
-    this._jsonReader.readFiles(files, result => {
-      this._addFile(result, files);
-    });
+    this._jsonReader.readFiles(files, result => this._addFile(result, files));
   };
 
   /**
@@ -167,13 +164,12 @@ export default class App extends React.Component<IDragComponentProps, IAppCompon
    * @private
    * @param {DragEvent} e Represents a drag and drop interaction.
    */
-  private _drop = (e: any): void => {
+  private _drop = (e: DragEvent): void => {
     e.preventDefault();
+
     if (e.dataTransfer && (e.dataTransfer.files.length !== 0)) {
       const files = e.dataTransfer.files;
-      this._jsonReader.readFiles(files, result => {
-        this._addFile(result, files);
-      });
+      this._jsonReader.readFiles(files, result => this._addFile(result, files));
     }
   };
 
@@ -185,5 +181,39 @@ export default class App extends React.Component<IDragComponentProps, IAppCompon
   private _removeFile = (file: TranslationFileModel): void => {
     _.remove(this.state.files, item => item.uuid === file.uuid);
     this.setState({files: this.state.files});
+  };
+
+  /**
+   * Updates a category name.
+   * @private
+   * @param {TranslationModel}  category  The category.
+   * @param {string}            newName   The new name.
+   */
+  private _updateCategoryName = (category: TranslationModel, newName): void => {
+    category.name = newName;
+    this.setState({translation: this.state.translation});
+  };
+
+  /**
+   * Updates a key.
+   * @private
+   * @param {TranslationItemModel}  item    The item.
+   * @param {string}                newKey  The new key.
+   */
+  private _updateKey = (item: TranslationItemModel, newKey: string): void => {
+    item.key = newKey;
+    this.setState({translation: this.state.translation});
+  };
+
+  /**
+   * Updates a value.
+   * @private
+   * @param {TranslationItemModel}  item      The item.
+   * @param {string}                fileName  The file name.
+   * @param {string}                newValue  The new value.
+   */
+  private _updateValue = (item: TranslationItemModel, fileName: string, newValue: string): void => {
+    item[fileName] = newValue;
+    this.setState({translation: this.state.translation});
   };
 }

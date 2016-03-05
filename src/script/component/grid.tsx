@@ -37,7 +37,6 @@ import TranslationService from "../service/translation";
  */
 interface IGridComponentState {
   newKey?: string;
-  translation?: TranslationModel;
 }
 
 /**
@@ -46,7 +45,11 @@ interface IGridComponentState {
  */
 interface IGridComponentProps {
   files?: Array<TranslationFileModel>;
+  translation?: TranslationModel;
   removeFile?: (file: TranslationFileModel) => void;
+  updateCategoryName?: (category: TranslationModel, newName) => void;
+  updateKey?: (item: TranslationItemModel, newKey: string) => void;
+  updateValue?: (item: TranslationItemModel, fileName: string, newValue: string) => void;
 }
 
 /**
@@ -88,10 +91,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
     let fileHeader;
     let typeItemLink = {requestChange: this._updateNewKey, value: this.state.newKey};
 
-    for (const file of this.props.files) {
-      this.state.translation = this._translationService.parse(file, this.state.translation);
-    }
-    if (this.state.translation) {
+    if (this.props.translation) {
       header = this._createHeader();
       fileHeader = this._createFileHeader();
       body = this._createBody();
@@ -129,27 +129,25 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
    */
   private _addKey = (): void => {
     if (this.state.newKey) {
-      this.state.translation = this._translationService.addKey(this.state.newKey, this.props.files, this.state.translation);
+      this.props.translation = this._translationService.addKey(this.state.newKey, this.props.files, this.props.translation);
       this.setState({newKey: ""});
       this.forceUpdate();
     }
   };
 
+  private _createValueLink = (requestChange: Function, value: string): Object => {
+    return { requestChange: requestChange, value: value };
+  };
+
   private _createDOMForElements = (items: Array<TranslationItemModel>): Array<JSX.Element> => {
     return items.map((item, itemIndex) => {
       let elements = new Array<JSX.Element>();
-      const keyValue = {
-        requestChange: this._updateKey.bind(null, item),
-        value: item.key
-      };
-      elements.push(<td><input className="form-control" type="text" valueLink={keyValue}/></td>);
+      const keyValueLink = this._createValueLink(this.props.updateKey.bind(null, item), item.key);
+      elements.push(<td><input className="form-control" type="text" valueLink={keyValueLink}/></td>);
 
       for (let file of this.props.files) {
-        const value = {
-          requestChange: this._updateValue.bind(null, item.values, file.name),
-          value: item.values[file.name]
-        };
-        elements.push(<td className={file.uuid}><input className="form-control" type="text" valueLink={value}/></td>);
+        const valueValueLink = this._createValueLink(this.props.updateValue.bind(null, item.values, file.name), item.values[file.name]);
+        elements.push(<td className={file.uuid}><input className="form-control" type="text" valueLink={valueValueLink}/></td>);
       }
 
       return <tr>{elements}</tr>;
@@ -165,7 +163,8 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
 
     translation.categories.map(category => {
       const colSpan = this.props.files.length + 1;
-      elements.push(<tr><td colSpan={colSpan}>{category.name}</td></tr>);
+      const categoryNameValueLink = this._createValueLink(this.props.updateCategoryName.bind(null, category), category.name);
+      elements.push(<tr><td colSpan={colSpan}><input className="form-control" type="text" valueLink={categoryNameValueLink}/></td></tr>);
       elements.concat(this._createDOMForTranslation(category, elements));
     });
 
@@ -178,7 +177,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
    * @return The render.
    */
   private _createBody = (): any => {
-    return this._createDOMForTranslation(this.state.translation);
+    return this._createDOMForTranslation(this.props.translation);
   };
 
   /**
@@ -237,12 +236,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
       }
 
       this.props.removeFile(file);
-      this._translationService.removeFile(this.state.translation, file.name);
-      if (this.props.files.length > 1) {
-          this.setState({translation: this.state.translation});
-      } else {
-        this.setState({translation: undefined});
-      }
+      this._translationService.removeFile(this.props.translation, file.name);
     });
   };
 
@@ -253,7 +247,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
    * @param callback The callback. This parameter is optional.
    */
   private _saveFile = (fileName: string, callback?: Function): void => {
-    const value = this._translationService.getJSON(this.state.translation, fileName);
+    const value = this._translationService.getJSON(this.props.translation, fileName);
     const json = JSON.stringify(value);
 
     const options = { filters: [
@@ -271,34 +265,11 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
   };
 
   /**
-   * Updates a key.
-   * @private
-   * @param index The item index.
-   * @param value The new value.
-   */
-  private _updateKey = (item, value): void => {
-    item.key = value;
-    this.setState({translation: this.state.translation});
-  };
-
-  /**
    * Updates a new key.
    * @private
    * @param value       The new value.
    */
   private _updateNewKey = (value): void => {
     this.setState({newKey: value});
-  };
-
-  /**
-   * Updates a value.
-   * @private
-   * @param itemIndex   The item index.
-   * @param valueIndex  The value index.
-   * @param value       The new value.
-   */
-  private _updateValue = (item, fileName, value): void => {
-    item[fileName] = value;
-    this.setState({translation: this.state.translation});
   };
 }

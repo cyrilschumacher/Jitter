@@ -21,7 +21,6 @@
  * SOFTWARE.
  */
 
-import * as _ from "lodash";
 import * as fs from "fs";
 import * as React from "react";
 import {remote} from "electron";
@@ -190,7 +189,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
   private _createHeader = (): any => {
     let _grid = this;
     return this.props.files.map(file => {
-      let saveHandler = _grid._saveFile.bind(this, file.name);
+      let saveHandler = _grid._saveFile.bind(this, file);
       let closeHandler = _grid._closeFile.bind(this, file);
       return (
         <th className="grid__head__action">
@@ -236,22 +235,21 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
     };
     remote.dialog.showMessageBox(null, options, response => {
       if (!response) {
-        this._saveFile(file.name);
+        this._saveFile(file);
       }
 
       this.props.removeFile(file);
-      this._translationService.removeFile(this.props.translation, file.name);
     });
   };
 
   /**
    * Save the translation file.
    * @private
-   * @param fileName The file name.
-   * @param callback The callback. This parameter is optional.
+   * @param file      The file name.
+   * @param callback  The callback. This parameter is optional.
    */
-  private _saveFile = (fileName: string, callback?: Function): void => {
-    const value = this._translationService.getJSON(this.props.translation, fileName);
+  private _saveFile = (file: TranslationFileModel, callback?: Function): void => {
+    const value = this._translationService.getJSON(this.props.translation, file.name);
     const json = JSON.stringify(value);
 
     const options = { filters: [

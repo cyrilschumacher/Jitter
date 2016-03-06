@@ -135,6 +135,17 @@ export default class App extends React.Component<IDragComponentProps, IAppCompon
   };
 
   /**
+   * Adds key in category.
+   * @private
+   * @param {TranslationModel} category The category.
+   * @param {string}           key      The key.
+   */
+  private _addKey = (category: TranslationModel): void => {
+    this._translationService.addKey(category, this.state.files);
+    this.setState({translation: this.state.translation});
+  };
+
+  /**
    * Open browse.
    * @private
    */
@@ -181,16 +192,6 @@ export default class App extends React.Component<IDragComponentProps, IAppCompon
   };
 
   /**
-   * Removes file.
-   * @private
-   * @param {TranslationFileModel} file The file to remove.
-   */
-  private _removeFile = (file: TranslationFileModel): void => {
-    _.remove(this.state.files, item => item.uuid === file.uuid);
-    this.setState({files: this.state.files});
-  };
-
-  /**
    * Remove category.
    * @private
    * @param {Array<TranslationModel>} categories  The categories.
@@ -202,14 +203,20 @@ export default class App extends React.Component<IDragComponentProps, IAppCompon
   };
 
   /**
-   * Adds key in category.
+   * Removes file.
    * @private
-   * @param {TranslationModel} category The category.
-   * @param {string}           key      The key.
+   * @param {TranslationFileModel} file The file to remove.
    */
-  private _addKey = (category: TranslationModel): void => {
-    this._translationService.addKey(category, this.state.files);
-    this.setState({translation: this.state.translation});
+  private _removeFile = (file: TranslationFileModel): void => {
+    if (this.state.files.length > 1) {
+      _.remove(this.state.files, item => item.uuid === file.uuid);
+      this._translationService.removeFile(this.state.translation, file.name);
+    } else {
+      this.state.translation = undefined;
+      this.state.files = [];
+    }
+
+    this.setState({files: this.state.files, translation: this.state.translation});
   };
 
   /**

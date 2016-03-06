@@ -31,11 +31,12 @@ export default class TranslationModel {
   /**
    * Constructor.
    * @constructor
+   * @param id          The identifier.
    * @param name        The category name.
    * @param categories  The category categories.
    * @param items       The category item.
    */
-  public constructor(public name: string, public categories?: Array<TranslationModel>, public items?: Array<TranslationItem>) {
+  public constructor(public id: string, public name: string, public categories?: Array<TranslationModel>, public items?: Array<TranslationItem>) {
     if (!this.categories) {
       this.categories = new Array();
     }

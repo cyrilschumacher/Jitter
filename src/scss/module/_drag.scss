@@ -22,86 +22,68 @@
 
 @keyframes shake {
   10%, 90% {
-    transform: translate3d(-.1rem, 0, 0) scale(1.5);
+    transform: translate3d(-.1rem, 0, 0);
   }
 
   20%, 80% {
-    transform: translate3d(.2rem, 0, 0) scale(1.5);
+    transform: translate3d(.2rem, 0, 0);
   }
 
   30%, 50%, 70% {
-    transform: translate3d(-.4rem, 0, 0) scale(1.5);
+    transform: translate3d(-.4rem, 0, 0);
   }
 
   40%, 60% {
-    transform: translate3d(.4rem, 0, 0) scale(1.5);
+    transform: translate3d(.4rem, 0, 0);
   }
 }
 
 .drag {
-  background: $gray-lighter;
-  border-radius: 10px;
-  bottom: 0;
+  border: 0 solid #00b0d9;
+  box-sizing: border-box;
   display: table;
-  height: 80%;
-  left: 0;
-  margin: auto;
-  padding: 2rem;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 80%;
+  height: inherit;
+  transition: 500ms border;
+  width: inherit;
 
   &__browse-input {
     display: none !important;
   }
 
   &__container {
-    border: .2rem dashed $gray;
-    border-radius: 10px;
+    color: #6e7175;
     display: table-cell;
     text-align: center;
     vertical-align: middle;
 
     &__icon {
-      color: $link-color;
-      font-size: 10rem;
       transition: 100ms transform;
     }
 
     &__subtitle {
+      font-size: 1.5rem;
       font-weight: 300;
 
       &__browse {
+        color: #017ca3;
         cursor: pointer;
         font-weight: 700;
-
-        &:hover,
-        &:focus {
-          color: $drag-browse-hover-color;
-        }
       }
     }
 
     &__title {
+      font-size: 3rem;
       font-weight: 700;
-      margin: 0 0 1rem;
+      margin: 0;
     }
   }
 
   &--over {
-    .drag {
-      &__container {
-        border-color: $brand-primary;
+    border: 1rem solid #00b0d9;
 
-        &__icon {
-          animation: shake 750ms cubic-bezier(.36, .07, .19, .97) both;
-          color: $brand-primary;
-        }
-
-        &__title {
-          color: $brand-primary;
-        }
+    &__container {
+      &__icon {
+        animation: shake 750ms cubic-bezier(.36, .07, .19, .97) both;
       }
     }
   }

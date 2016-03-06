@@ -47,6 +47,7 @@ interface IGridComponentProps {
   files?: Array<TranslationFileModel>;
   translation?: TranslationModel;
   removeFile?: (file: TranslationFileModel) => void;
+  removeCategory?: (categories: Array<TranslationModel>, category: TranslationModel) => void;
   updateCategoryName?: (category: TranslationModel, newName) => void;
   updateKey?: (item: TranslationItemModel, newKey: string) => void;
   updateValue?: (item: TranslationItemModel, fileName: string, newValue: string) => void;
@@ -98,14 +99,13 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
 
     return (
       <div className="grid">
-        <table className="table table-striped table-hover">
+        <table>
           <thead>
             <tr>
-              <th className="text-center">Key</th>
-                {fileHeader}
+              <th className="grid__head__file"></th>{fileHeader}
             </tr>
             <tr>
-              <th></th>
+              <th className="grid__head__action"></th>
               {header}
             </tr>
           </thead>
@@ -123,14 +123,22 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
     return items.map((item, itemIndex) => {
       let elements = new Array<JSX.Element>();
       const keyValueLink = this._createValueLink(this.props.updateKey.bind(null, item), item.key);
-      elements.push(<td><input className="form-control" type="text" valueLink={keyValueLink}/></td>);
+      elements.push(
+        <td>
+          <input type="text" valueLink={keyValueLink}/>
+        </td>
+      );
 
       for (let file of this.props.files) {
         const valueValueLink = this._createValueLink(this.props.updateValue.bind(null, item.values, file.name), item.values[file.name]);
-        elements.push(<td className={file.uuid}><input className="form-control" type="text" valueLink={valueValueLink}/></td>);
+        elements.push(
+          <td>
+            <input type="text" valueLink={valueValueLink}/>
+          </td>
+        );
       }
 
-      return <tr>{elements}</tr>;
+      return <tr className="grid__body__item">{elements}</tr>;
     });
   };
 
@@ -141,14 +149,24 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
 
     this._createDOMForElements(translation.items).forEach(value => elements.push(value));
 
-    if (elements.length > 0) {
-      elements.push(<tr><td colSpan={this.props.files.length + 1}><button onClick={this.props.addKey.bind(null, translation)}>Add key</button></td></tr>);
-    }
-
     translation.categories.map(category => {
       const colSpan = this.props.files.length + 1;
       const categoryNameValueLink = this._createValueLink(this.props.updateCategoryName.bind(null, category), category.name);
-      elements.push(<tr><td colSpan={colSpan}><input className="form-control" type="text" valueLink={categoryNameValueLink}/></td></tr>);
+      elements.push(
+        <tr>
+          <td colSpan={colSpan}>
+            <div className="grid__body__category">
+              <button className="grid__body__category__add" onClick={this.props.addKey.bind(null, category)}>
+                <i className="ion-plus-circled"></i>
+              </button>
+              <button className="grid__body__category__remove" onClick={this.props.removeCategory.bind(null, translation.categories, category)}>
+                <i className="ion-close-circled"></i>
+              </button>
+              <input type="text" valueLink={categoryNameValueLink}/>
+            </div>
+          </td>
+        </tr>
+      );
       elements.concat(this._createDOMForTranslation(category, elements));
     });
 
@@ -175,13 +193,15 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
       let saveHandler = _grid._saveFile.bind(this, file.name);
       let closeHandler = _grid._closeFile.bind(this, file);
       return (
-        <th>
-          <div className="text-center">
-            <div className="btn-group">
-              <button className="btn btn-primary" onClick={saveHandler}>Save</button>
-              <button className="btn btn-danger" onClick={closeHandler}>Close</button>
-            </div>
-          </div>
+        <th className="grid__head__action">
+            <button className="grid__head__action__save" onClick={saveHandler}>
+              <i className="ion-ios-download-outline"></i>
+              <span>Save</span>
+            </button>
+            <button className="grid__head__action__close" onClick={closeHandler}>
+              <i className="ion-close"></i>
+              <span>Close</span>
+            </button>
         </th>
       );
     });
@@ -195,7 +215,7 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
   private _createFileHeader = (): any => {
     return this.props.files.map(file => {
       return (
-        <th className="text-center">
+        <th className="grid__head__file">
           <span>{file.name}</span>
         </th>
       );

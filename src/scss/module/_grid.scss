@@ -19,3 +19,102 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+
+.grid {
+  height: 100%;
+  width: 100%;
+
+  table {
+    table-layout: fixed;
+    width: inherit;
+  }
+
+  &__head {
+    &__file {
+      background: #00b0d9;
+      color: #fff;
+      width: 30rem;
+      padding: 2rem;
+    }
+
+    &__action {
+      background: #ccc;
+      padding: 1rem 0;
+
+      &__save {
+        &:hover {
+          border-color: #388e3c;
+          color: #388e3c;
+        }
+      }
+
+      &__close {
+        &:hover {
+          border-color: #ff4a22;
+          color: #ff4a22;
+        }
+      }
+
+      button {
+        background: none;
+        border: .1rem solid #7f969f;
+        color: #7f969f;
+        margin: 0 .5rem;
+        padding: 1rem;
+        width: 15rem;
+
+        i {
+          margin: 0 2rem 0 0;
+        }
+
+        span {
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+
+  &__body {
+    &__category {
+      display: flex;
+
+      &__add,
+      &__remove {
+        background: #ccc;
+        border: 0;
+        color: #555;
+        padding: 1rem;
+        width: 5rem;
+
+        &:hover {
+          background: #ddd;
+        }
+      }
+
+      input {
+        background: #ccc;
+        border: .1rem solid #ccc;
+        box-sizing: border-box;
+        color: #555;
+        font-weight: 700;
+        padding: 1rem;
+        width: 100%;
+      }
+    }
+
+    &__item {
+      input {
+        border: .1rem solid #ccc;
+        box-sizing: border-box;
+        color: #ccc;
+        padding: 1rem;
+        width: 100%;
+
+        &:focus {
+          border-color: #7f969f;
+          color: #7f969f;
+        }
+      }
+    }
+  }
+}

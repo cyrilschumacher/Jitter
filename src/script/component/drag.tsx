@@ -46,7 +46,7 @@ class Drag extends React.Component<any, any> {
   public render(): React.ReactElement<any> {
     return (
       <div className="drag__container">
-        <i className="drag__container__icon ion-document-text"></i>
+        <img className="drag__container__icon" src="asset/image/file_icon.png"/>
         <h1 className="drag__container__title">{this.props.t("drag.title")}</h1>
         <span className="drag__container__subtitle">
           <span>{this.props.t("drag.subtitle")}</span>

@@ -56,6 +56,7 @@ export default class JsonReader {
 
   /**
    * Generates a UUID.
+   * @private
    * @return The UUID.
    */
   private _generateUUID = (): string => {

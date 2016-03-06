@@ -90,10 +90,27 @@ export default class TranslationService {
    */
   private _createTranslation = (categoryName: string, translation: TranslationModel): TranslationModel => {
     if (!translation) {
-      return new TranslationModel(categoryName);
+      const id = this._generateUUID();
+      return new TranslationModel(id, categoryName);
     }
 
     return translation;
+  };
+
+  /**
+   * Generates a UUID.
+   * @private
+   * @return The UUID.
+   */
+  private _generateUUID = (): string => {
+    let d = new Date().getTime();
+    const uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+      const r = (d + Math.random() * 16) % 16 | 0;
+      d = Math.floor(d / 16);
+      return ((c === "x") ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+
+    return uuid;
   };
 
   /**
@@ -139,7 +156,9 @@ export default class TranslationService {
   private _getExistingCategory = (translation: TranslationModel, key: string): TranslationModel => {
     const matches = _.some(translation.categories, category => category.name === key);
     if (!matches) {
-      translation.categories.push(new TranslationModel(key));
+      const id = this._generateUUID();
+      const category = new TranslationModel(id, key);
+      translation.categories.push(category);
     }
 
     return _.find(translation.categories, category => category.name === key);

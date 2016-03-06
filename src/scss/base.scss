@@ -25,7 +25,7 @@
 
 @import 'tool/color', 'tool/variables';
 @import 'module/app', 'module/drag', 'module/grid';
-@import 'base/base', 'base/normalize';
+@import 'base/reset', 'base/base';
 
 .hidden {
   display: none;

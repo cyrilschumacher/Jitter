@@ -36,7 +36,8 @@ export default class TranslationService {
   public addKey = (translation: TranslationModel, files: Array<TranslationFileModel>, key?: string): TranslationModel => {
     key = key || "";
 
-    let newItem = new TranslationItemModel(key, new Array());
+    const id = this._generateUUID();
+    const newItem = new TranslationItemModel(id, key);
     _.forEach(files, file => {
       newItem.values[file.name] = "";
     });
@@ -140,7 +141,8 @@ export default class TranslationService {
   private _parseKey = (items: Array<TranslationItemModel>, fileName: string, key: string, value: string): void => {
     let matches = _.some(items, item => item.key === key);
     if (!matches) {
-      items.push(new TranslationItemModel(key, new Array()));
+      const id = this._generateUUID();
+      items.push(new TranslationItemModel(id, key));
     }
 
     let translationKey = _.filter(items, item => item.key === key);

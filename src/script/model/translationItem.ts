@@ -40,9 +40,13 @@ export default class TranslationItemModel {
   /**
    * Constructor.
    * @constructor
+   * @param id    The identifier.
    * @param key   The key.
-   * @param value The values.
+   * @param value Optional. The values.
    */
-  public constructor(public key: string, public values: Array<TranslationItemValue>) {
+  public constructor(public id: string, public key: string, public values?: Array<TranslationItemValue>) {
+    if (!values) {
+      this.values = new Array();
+    }
   }
 }

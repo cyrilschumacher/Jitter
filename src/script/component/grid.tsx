@@ -47,6 +47,7 @@ interface IGridComponentProps {
   translation?: TranslationModel;
   removeFile?: (file: TranslationFileModel) => void;
   removeCategory?: (categories: Array<TranslationModel>, category: TranslationModel) => void;
+  removeKey?: (category: TranslationModel, item: TranslationItemModel) => void;
   updateCategoryName?: (category: TranslationModel, newName) => void;
   updateKey?: (item: TranslationItemModel, newKey: string) => void;
   updateValue?: (item: TranslationItemModel, fileName: string, newValue: string) => void;
@@ -124,7 +125,12 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
       const keyValueLink = this._createValueLink(this.props.updateKey.bind(null, item), item.key);
       elements.push(
         <td>
-          <input type="text" valueLink={keyValueLink}/>
+          <div className="grid__body__item__key">
+            <button onClick={this.props.removeKey.bind(null, items, item)}>
+              <i className="ion-close-circled"></i>
+            </button>
+            <input type="text" valueLink={keyValueLink}/>
+          </div>
         </td>
       );
 

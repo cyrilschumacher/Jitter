@@ -1,0 +1,11 @@
+{
+  "key1": "value1",
+  "key2": "value2",
+  "key3": "value3",
+  "category1": {
+    "key4": "value4",
+    "category2": {
+      "key5": "value5"
+    }
+  }
+}

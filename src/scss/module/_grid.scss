@@ -87,7 +87,19 @@
         width: 5rem;
 
         &:hover {
-          background: #ddd;
+          color: #fff;
+        }
+      }
+
+      &__add {
+        &:hover {
+        background: #388e3c;
+        }
+      }
+
+      &__remove {
+        &:hover {
+          background: #ff4a22;
         }
       }
 
@@ -103,8 +115,34 @@
     }
 
     &__item {
+      border: .1rem solid #ccc;
+
+      &__key {
+          display: flex;
+
+          button {
+            background: none;
+            border: 0;
+            color: #ff4a22;
+            margin-left: 5rem;
+            padding: 1rem;
+            width: 5rem;
+
+            &:hover {
+              background: #ff4a22;
+              color: #fff;
+            }
+          }
+
+          input {
+            border: 0;
+            border-left: 0 !important;
+          }
+      }
+
       input {
-        border: .1rem solid #ccc;
+        border: 0;
+        border-left: .1rem solid #ccc;
         box-sizing: border-box;
         color: #ccc;
         padding: 1rem;

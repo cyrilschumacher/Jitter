@@ -110,6 +110,7 @@ export default class App extends React.Component<IDragComponentProps, IAppCompon
                 addKey={this._addKey}
                 removeFile={this._removeFile}
                 removeCategory={this._removeCategory}
+                removeKey={this._removeKey}
                 updateCategoryName={this._updateCategoryName}
                 updateKey={this._updateKey}
                 updateValue={this._updateValue}/>
@@ -199,6 +200,17 @@ export default class App extends React.Component<IDragComponentProps, IAppCompon
    */
   private _removeCategory = (categories: Array<TranslationModel>, category: TranslationModel): void => {
     _.remove(categories, item => item.id === category.id);
+    this.setState({translation: this.state.translation});
+  };
+
+  /**
+   * Remove key.
+   * @private
+   * @param {TranslationModel}      categorie   The category.
+   * @param {TranslationItemModel}  item        The item to remove.
+   */
+  private _removeKey = (items: Array<TranslationItemModel>, item: TranslationItemModel): void => {
+    _.remove(items, x => x.id === item.id);
     this.setState({translation: this.state.translation});
   };
 

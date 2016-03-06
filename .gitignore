@@ -100,4 +100,5 @@ Temporary Items
 
 ### Custom ###
 dist/
+release/
 typings/

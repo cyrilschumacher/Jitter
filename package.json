@@ -7,7 +7,7 @@
     "url": "https://github.com/cyrilschumacher/jitter.git"
   },
   "scripts": {
-    "release": "electron-packager ./dist Jitter --platform=all --arch=all --version=0.36.8",
+    "release": "cd dist && npm install --production && electron-packager . Jitter --platform=all --arch=all --version=0.36.8 --out ../release",
     "start": "electron dist/index.js",
     "test": "mocha ./test/**/*.js"
   },
@@ -31,6 +31,7 @@
     "gulp-tslint": "^4.3.3",
     "gulp-typescript": "^2.12.1",
     "mocha": "^2.4.5",
+    "tslint": "^3.5.0",
     "typescript": "^1.8.7"
   },
   "dependencies": {

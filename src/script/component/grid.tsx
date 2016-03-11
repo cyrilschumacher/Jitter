@@ -87,12 +87,10 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
    * @return {any} The reference to the component.
    */
   public render(): React.ReactElement<any> {
-    let header;
     let body;
     let fileHeader;
 
     if (this.props.translation) {
-      header = this._createHeader();
       fileHeader = this._createFileHeader();
       body = this._createBody();
     }
@@ -104,10 +102,6 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
             <tr>
               <th className="grid__head__file"></th>{fileHeader}
             </tr>
-            <tr>
-              <th className="grid__head__action"></th>
-              {header}
-            </tr>
           </thead>
           <tbody>{body}</tbody>
         </table>
@@ -115,8 +109,25 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
     );
   };
 
-  private _createValueLink = (requestChange: Function, value: string): Object => {
-    return { requestChange: requestChange, value: value };
+  /**
+   * Closes a file.
+   * @private
+   * @param uuid The UUID.
+   */
+  private _closeFile = (file: TranslationFileModel): void => {
+    const options = {
+      buttons: ["Yes", "No"],
+      message: "Do you want to save your file before closing?",
+      title: "Unsaved Changes",
+      type: "question"
+    };
+    remote.dialog.showMessageBox(null, options, response => {
+      if (!response) {
+        this._saveFile(file);
+      }
+
+      this.props.removeFile(file);
+    });
   };
 
   private _createDOMForElements = (items: Array<TranslationItemModel>): Array<JSX.Element> => {
@@ -192,60 +203,33 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
    * @private
    * @return The render.
    */
-  private _createHeader = (): any => {
-    let _grid = this;
-    return this.props.files.map(file => {
-      let saveHandler = _grid._saveFile.bind(this, file);
-      let closeHandler = _grid._closeFile.bind(this, file);
-      return (
-        <th className="grid__head__action">
-            <button className="grid__head__action__save" onClick={saveHandler}>
-              <i className="ion-ios-download-outline"></i>
-              <span>Save</span>
-            </button>
-            <button className="grid__head__action__close" onClick={closeHandler}>
-              <i className="ion-close"></i>
-              <span>Close</span>
-            </button>
-        </th>
-      );
-    });
-  };
-
-  /**
-   * Creates a header.
-   * @private
-   * @return The render.
-   */
   private _createFileHeader = (): any => {
     return this.props.files.map(file => {
+      let closeHandler = this._closeFile.bind(this, file);
+      let saveHandler = this._saveFile.bind(this, file);
       return (
         <th className="grid__head__file">
           <span>{file.name}</span>
+          <button className="grid__head__file__close" onClick={closeHandler}>
+            <i className="ion-ios-close"></i>
+          </button>
+          <button className="grid__head__action__save" onClick={saveHandler}>
+            <i className="ion-ios-checkmark"></i>
+          </button>
         </th>
       );
     });
   };
 
   /**
-   * Closes a file.
+   * Creates a value link.
    * @private
-   * @param uuid The UUID.
+   * @param requestChange   The update function.
+   * @param value           The new value.
+   * @return The value link.
    */
-  private _closeFile = (file: TranslationFileModel): void => {
-    const options = {
-      buttons: ["Yes", "No"],
-      message: "Do you want to save your file before closing?",
-      title: "Unsaved Changes",
-      type: "question"
-    };
-    remote.dialog.showMessageBox(null, options, response => {
-      if (!response) {
-        this._saveFile(file);
-      }
-
-      this.props.removeFile(file);
-    });
+  private _createValueLink = (requestChange: Function, value: string): Object => {
+    return { requestChange: requestChange, value: value };
   };
 
   /**

@@ -17,7 +17,7 @@ describe('translationService', function() {
   it('should return JSON data as a translation model', function() {
     //TODO: add test for category.
     var values = {"fileName": "value1", "otherFileName": "value2"};
-    var item = new TranslationItemModel.default("key1", values);
+    var item = new TranslationItemModel.default("id", "key1", values);
     var translation = new TranslationModel.default("id", "Default", [], [item]);
 
     var json = service.getJSON(translation, "fileName");

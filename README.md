@@ -9,7 +9,30 @@
 [![David Dependency Status](https://david-dm.org/cyrilschumacher/Jitter.svg)](https://david-dm.org/cyrilschumacher/Jitter)
 [![david devDependency Status](https://david-dm.org/cyrilschumacher/Jitter/dev-status.svg)](https://david-dm.org/cyrilschumacher/Jitter#info=devDependencies)
 
-Jitter is a tool for to edit your language files in JSON format.
+Jitter is a tool for to edit your language files in JSON format:
+
+* **Opens** your translation files,
+* **visualizes and compares** side by side,
+* **creates** or **delete** one or more categories or keys simply,
+* and **saves** your results.
+
+![Jitter](asset/preview.gif)
+
+## Installation
+```
+npm install tsd -g
+
+npm install
+tsd install
+gulp
+```
+
+## How to generate executables?
+For generate executables (OS X, Windows, Linux), type the following commands in the terminal:
+
+```
+npm release
+```
 
 ## Copyright
 

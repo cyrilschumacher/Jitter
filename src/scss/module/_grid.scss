@@ -123,6 +123,7 @@
         width: 100%;
 
         &:focus {
+          border-left-width: .5rem;
           border-color: #7f969f;
           color: #7f969f;
         }

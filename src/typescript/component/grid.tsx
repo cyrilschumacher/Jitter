@@ -23,6 +23,7 @@
 
 import * as fs from "fs";
 import * as React from "react";
+import * as Modal from "react-modal";
 import {remote} from "electron";
 
 import TranslationModel from "../model/translation";

@@ -21,6 +21,7 @@
  * SOFTWARE.
  */
 
+
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as classNames from "classnames";
@@ -154,7 +155,13 @@ export default class App extends React.Component<IDragComponentProps, IAppCompon
     const browseElement = document.getElementById("browse") as HTMLInputElement;
     browseElement.click();
 
+    browseElement.onchange = this._browseOnChange;
+  };
+
+  private _browseOnChange = (): void => {
+    const browseElement = document.getElementById("browse") as HTMLInputElement;
     const files = browseElement.files;
+
     this._jsonReader.readFiles(files, result => this._addFile(result, files));
   };
 

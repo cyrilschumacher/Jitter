@@ -17,16 +17,16 @@
     ],
     "files": [
         "./src/index.ts",
-        "./src/script/i18n.ts",
-        "./src/script/model/translation.ts",
-        "./src/script/model/translationFile.ts",
-        "./src/script/model/translationItem.ts",
-        "./src/script/service/jsonReader.ts",
-        "./src/script/service/translation.ts",
-        "./src/script/app.tsx",
-        "./src/script/component/app.tsx",
-        "./src/script/component/drag.tsx",
-        "./src/script/component/grid.tsx"
+        "./src/typescript/i18n.ts",
+        "./src/typescript/model/translation.ts",
+        "./src/typescript/model/translationFile.ts",
+        "./src/typescript/model/translationItem.ts",
+        "./src/typescript/service/jsonReader.ts",
+        "./src/typescript/service/translation.ts",
+        "./src/typescript/app.tsx",
+        "./src/typescript/component/app.tsx",
+        "./src/typescript/component/drag.tsx",
+        "./src/typescript/component/grid.tsx"
     ],
     "exclude": [],
     "atom": {

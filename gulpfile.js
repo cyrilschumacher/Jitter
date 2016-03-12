@@ -42,9 +42,13 @@ function exec_sass() {
  */
 function exec_typescript() {
   console.log('Compiles TypeScript files.');
-  gulp.src(['src/**/*.{ts,tsx}'])
+  gulp.src(['src/*.ts'])
     .pipe(ts(tsconfig.compilerOptions))
     .pipe(gulp.dest('dist/'));
+
+  gulp.src(['src/typescript/**/*.{ts,tsx}'])
+    .pipe(ts(tsconfig.compilerOptions))
+    .pipe(gulp.dest('dist/javascript/'));
 }
 
 /**

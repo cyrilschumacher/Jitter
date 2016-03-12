@@ -31,6 +31,7 @@ export default class TranslationService {
    * Adds a new key.
    * @param files       The files.
    * @param translation The translation.
+   * @param key         Optional. The default key.
    * @return The translation.
    */
   public addKey = (translation: TranslationModel, files: Array<TranslationFileModel>, key?: string): TranslationModel => {
@@ -60,10 +61,10 @@ export default class TranslationService {
   };
 
   /**
-   * Parse a file.
+   * Parses a file.
    * @param translation The translation.
    * @param file        The file to parse.
-   * @param defaultName The default category name.
+   * @param defaultName Optional. The default category name.
    * @return The new translation.
    */
   public parse = (file: TranslationFileModel, translation?: TranslationModel, defaultName?: string): TranslationModel => {
@@ -74,7 +75,7 @@ export default class TranslationService {
   };
 
   /**
-   * Remove a file in translation.
+   * Removes a file in translation.
    * @param translation The translation.
    * @param file        The file to parse.
    */
@@ -84,7 +85,7 @@ export default class TranslationService {
   };
 
   /**
-   * Create a translation.
+   * Creates a translation.
    * @private
    * @param categoryName  The category name.
    * @param translation   The model.
@@ -115,6 +116,23 @@ export default class TranslationService {
   };
 
   /**
+   * Parses category in file.
+   * @param translation The translation.
+   * @param key         The key.
+   * @return The category.
+   */
+  private _getExistingCategory = (translation: TranslationModel, key: string): TranslationModel => {
+    const matches = _.some(translation.categories, category => category.name === key);
+    if (!matches) {
+      const id = this._generateUUID();
+      const category = new TranslationModel(id, key);
+      translation.categories.push(category);
+    }
+
+    return _.find(translation.categories, category => category.name === key);
+  };
+
+  /**
    * Gets the JSON data by model.
    * @private
    * @param fileName      The file name.
@@ -134,40 +152,7 @@ export default class TranslationService {
   };
 
   /**
-   * Parse key in file.
-   * @param translation The translation.
-   * @param fileName    The file name.
-   */
-  private _parseKey = (items: Array<TranslationItemModel>, fileName: string, key: string, value: string): void => {
-    let matches = _.some(items, item => item.key === key);
-    if (!matches) {
-      const id = this._generateUUID();
-      items.push(new TranslationItemModel(id, key));
-    }
-
-    let translationKey = _.filter(items, item => item.key === key);
-    translationKey[0].values[fileName] = value;
-  };
-
-  /**
-   * Parse category in file.
-   * @param translation The translation.
-   * @param key         The key.
-   * @return The category.
-   */
-  private _getExistingCategory = (translation: TranslationModel, key: string): TranslationModel => {
-    const matches = _.some(translation.categories, category => category.name === key);
-    if (!matches) {
-      const id = this._generateUUID();
-      const category = new TranslationModel(id, key);
-      translation.categories.push(category);
-    }
-
-    return _.find(translation.categories, category => category.name === key);
-  };
-
-  /**
-   * Parse a file.
+   * Parses a file.
    * @private
    * @param json        The JSON data.
    * @param translation The translation.
@@ -188,7 +173,24 @@ export default class TranslationService {
   };
 
   /**
-   * Remove file in translation item.
+   * Parses key in file.
+   * @private
+   * @param translation The translation.
+   * @param fileName    The file name.
+   */
+  private _parseKey = (items: Array<TranslationItemModel>, fileName: string, key: string, value: string): void => {
+    let matches = _.some(items, item => item.key === key);
+    if (!matches) {
+      const id = this._generateUUID();
+      items.push(new TranslationItemModel(id, key));
+    }
+
+    let translationKey = _.filter(items, item => item.key === key);
+    translationKey[0].values[fileName] = value;
+  };
+
+  /**
+   * Removes file in translation item.
    * @private
    * @param item      The translation item.
    * @param fileName  The file name to remove.

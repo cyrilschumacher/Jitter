@@ -54,7 +54,6 @@ function onReady() {
     };
 
     mainWindow = new BrowserWindow(options);
-    // todo: Uncomment if production: mainWindow.setMenuBarVisibility(false);
 
     const url = `file://${__dirname}/index.html`;
     mainWindow.loadURL(url);

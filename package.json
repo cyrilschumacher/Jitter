@@ -1,38 +1,41 @@
 {
   "name": "jitter",
-  "version": "0.3.1",
+  "version": "0.0.1",
   "description": "Edit your language files in JSON format with ease!",
   "repository": {
     "type": "git",
     "url": "https://github.com/cyrilschumacher/jitter.git"
   },
   "scripts": {
-    "release": "cd dist && npm install --production && electron-packager . Jitter --platform=all --arch=all --version=0.36.8 --out ../release",
+    "release": "cd dist && npm install --production && electron-packager . Jitter --platform=all --arch=all --version=0.37.0 --out ../release",
     "start": "electron dist/index.js",
     "test": "mocha ./test/**/*.js"
   },
   "keywords": [
+    "editor",
     "jitter",
     "json",
-    "translation",
+    "language",
+    "languages",
+    "resources",
     "translate",
-    "language"
+    "translation"
   ],
   "author": "Cyril Schumacher",
   "license": "MIT",
-  "electronVersion": "0.36.8",
+  "electronVersion": "0.37.0",
   "devDependencies": {
     "chai": "^3.5.0",
     "electron-packager": "^5.2.1",
-    "electron-prebuilt": "^0.36.11",
-    "gulp": "^3.9.1",
-    "gulp-jade": "^1.1.0",
-    "gulp-sass": "^2.2.0",
-    "gulp-tslint": "^4.3.3",
-    "gulp-typescript": "^2.12.1",
+    "electron-prebuilt": "^0.37.0",
+    "gulp": "*",
+    "gulp-jade": "*",
+    "gulp-sass": "*",
+    "gulp-tslint": "*",
+    "gulp-typescript": "*",
     "mocha": "^2.4.5",
-    "tslint": "^3.5.0",
-    "typescript": "^1.8.7"
+    "tslint": "*",
+    "typescript": "*"
   },
   "dependencies": {
     "classnames": "^2.2.3",
@@ -44,6 +47,7 @@
     "react-bootstrap": "^0.28.3",
     "react-dom": "^0.14.7",
     "react-i18next": "^1.2.1",
+    "react-modal": "^0.6.1",
     "react-router": "^2.0.1"
   }
 }

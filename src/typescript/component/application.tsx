@@ -28,6 +28,7 @@ import * as classNames from "classnames";
 
 import Drag from "./drag";
 import Grid from "./grid";
+import Navigation from "./navigation";
 
 import JsonReader from "../service/jsonReader";
 import TranslationService from "../service/translation";
@@ -54,11 +55,11 @@ interface IDragComponentProps {
 }
 
 /**
- * App component.
+ * Application component.
  * @class
  * @extends React.Component
  */
-export default class App extends React.Component<IDragComponentProps, IAppComponentState> {
+export default class Application extends React.Component<IDragComponentProps, IAppComponentState> {
   /**
    * JSON reader.
    * @private
@@ -101,7 +102,8 @@ export default class App extends React.Component<IDragComponentProps, IAppCompon
     });
 
     return (
-      <div className="app" onDragLeave={this._dragLeave} onDragOver={this._dragOver} onDrop={this._drop}>
+      <div className="application" onDragLeave={this._dragLeave} onDragOver={this._dragOver} onDrop={this._drop}>
+        <Navigation/>
         <div className={dragClass}>
           <Drag addFile={this._addFile} browse={this._browse}/>
         </div>

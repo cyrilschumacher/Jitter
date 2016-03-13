@@ -9,5 +9,17 @@
     "close": "Close",
     "keys": "Keys",
     "save": "Save As..."
+  },
+  "modal": {
+    "settings": {
+      "title": "Settings",
+      "form": {
+        "save": "Save settings",
+        "indent": {
+          "title": "JSON indentation",
+          "summary": "Change the number to indent the exported file JSON."
+        }
+      }
+    }
   }
 }

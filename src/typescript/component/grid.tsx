@@ -97,16 +97,14 @@ export default class Grid extends React.Component<IGridComponentProps, IGridComp
     }
 
     return (
-      <div className="grid">
-        <table>
-          <thead>
-            <tr>
-              <th className="grid__head__file"></th>{fileHeader}
-            </tr>
-          </thead>
-          <tbody>{body}</tbody>
-        </table>
-      </div>
+      <table>
+        <thead>
+          <tr>
+            <th className="grid__head__file"></th>{fileHeader}
+          </tr>
+        </thead>
+        <tbody>{body}</tbody>
+      </table>
     );
   };
 

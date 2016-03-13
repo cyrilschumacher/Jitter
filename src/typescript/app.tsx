@@ -27,8 +27,8 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { I18nextProvider } from "react-i18next";
 
-import App from "./javascript/component/app";
+import Application from "./javascript/component/application";
 import i18n from "./javascript/i18n";
 
-const container = document.body;
-ReactDOM.render(<I18nextProvider i18n={i18n}><App /></I18nextProvider>, container);
+const container = document.getElementById("app");
+ReactDOM.render(<I18nextProvider i18n={i18n}><Application /></I18nextProvider>, container);

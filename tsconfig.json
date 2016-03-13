@@ -24,9 +24,11 @@
         "./src/typescript/service/jsonReader.ts",
         "./src/typescript/service/translation.ts",
         "./src/typescript/app.tsx",
-        "./src/typescript/component/app.tsx",
+        "./src/typescript/component/application.tsx",
         "./src/typescript/component/drag.tsx",
-        "./src/typescript/component/grid.tsx"
+        "./src/typescript/component/grid.tsx",
+        "./src/typescript/component/modal/settings.tsx",
+        "./src/typescript/component/navigation.tsx"
     ],
     "exclude": [],
     "atom": {

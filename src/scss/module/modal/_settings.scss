@@ -1,0 +1,108 @@
+// The MIT License (MIT)
+//
+// Copyright (c) 2016 Cyril Schumacher.fr
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+.modal {
+  &__settings {
+    background: #f4f4f4 !important;
+
+    &__header {
+      color: #747f8d;
+      margin: 0 0 5rem;
+
+      &__close {
+        background: none;
+        border: 0;
+        color: #3187e1;
+        font-size: 2rem;
+        margin: 0 2rem 0 0;
+      }
+
+      h1 {
+        color: #3187e1;
+        text-align: center;
+      }
+    }
+
+    &__form {
+      margin: 2rem 0;
+
+      &__indent {
+        width: 5rem;
+      }
+
+      &__label {
+        margin: 0 2rem 0 0;
+
+        &__title {
+          color: #747f8d;
+          display: block;
+          font-weight: 700;
+          text-transform: uppercase;
+        }
+
+        &__summary {
+          display: block;
+          font-size: 1.2rem;
+        }
+      }
+
+      p {
+        display: flex;
+        flex-direction: row;
+        margin: 0 0 2rem;
+      }
+
+      input {
+        background: none;
+        border: .1rem solid #747f8d;
+        color: #747f8d;
+        padding: .5rem 2rem;
+
+        &:focus {
+          background: #fff;
+        }
+      }
+
+      &__save {
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        right: 0;
+
+        button {
+          background: #388e3c;
+          border: 0;
+          color: #fff;
+          display: block;
+          font-weight: 700;
+          margin: 0 auto;
+          padding: .8rem 5rem;
+          text-transform: uppercase;
+
+          &:hover {
+            background: #2ab27b;
+          }
+        }
+      }
+    }
+  }
+}

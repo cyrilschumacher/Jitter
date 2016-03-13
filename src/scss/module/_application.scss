@@ -20,23 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@charset 'UTF-8';
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700,300);
-
-// Modules
-@import 'module/application',
-        'module/drag',
-        'module/grid',
-        'module/navigation',
-        'module/modal/settings';
-
-// Layout
-@import 'layout/section';
-
-// Base
-@import 'base/reset',
-        'base/base';
-
-.hidden {
-  display: none;
+.application {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  height: inherit;
+  width: inherit;
 }

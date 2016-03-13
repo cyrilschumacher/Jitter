@@ -39,12 +39,14 @@
 }
 
 .drag {
-  border: 0 solid #00b0d9;
+  bottom: 0;
   box-sizing: border-box;
-  display: table;
-  height: inherit;
+  left: 0;
+  margin: auto;
+  position: relative;
+  right: 0;
+  top: 0;
   transition: 500ms border;
-  width: inherit;
 
   &__browse-input {
     display: none !important;
@@ -52,9 +54,7 @@
 
   &__container {
     color: #6e7175;
-    display: table-cell;
     text-align: center;
-    vertical-align: middle;
 
     &__icon {
       transition: 100ms transform;
@@ -79,12 +79,6 @@
   }
 
   &--over {
-    border: 1rem solid #00b0d9;
-
-    &__container {
-      &__icon {
-        animation: shake 750ms cubic-bezier(.36, .07, .19, .97) both;
-      }
-    }
+    animation: shake 750ms cubic-bezier(.36, .07, .19, .97) both;
   }
 }

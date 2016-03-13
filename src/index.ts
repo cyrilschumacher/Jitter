@@ -49,7 +49,7 @@ function onClosed() {
 function onReady() {
     const options = {
       "min-height": 480,
-      "min-width": 600,
+      "min-width": 640,
       "title": "Jitter"
     };
 

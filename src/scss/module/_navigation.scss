@@ -20,18 +20,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-$drag-background-color: #fff;
-$drag-border-color: #c4bdbd;
-$drag-browse-hover-color: #616974;
-$drag-over-border-color: #ff768d;
-$drag-subtitle-color: #c4bdbd;
-$drag-title-color: #616974;
-$drag-over-title-color: #616974;
+.navigation {
+  -webkit-app-region: drag;
+  background: #3a3a3c;
+  display: flex;
+  flex-direction: column;
+  font-size: 3rem;
+  width: 5rem;
 
-$grid-background-color: #fff;
-$grid-header-text-color: #616974;
-$grid-over-key-value-border-color: #ff768d;
-$grid-header-action-border-color: #fff;
-$grid-header-action-over-background-color: #fff;
-$grid-header-action-over-text-color: #616974;
-$grid-over-footer-add-input-border-color: #ff768d;
+  button {
+    -webkit-app-region: no-drag;
+    background: none;
+    border: 0;
+    color: #fff;
+    padding: .5rem 1rem;
+
+    &:hover {
+      background: #555;
+    }
+  }
+}
